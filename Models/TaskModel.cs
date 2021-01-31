@@ -25,7 +25,7 @@ namespace Calendar.Models
 
         #endregion
 
-        #region ImplementInterfaces
+        #region SQLfunctions
         public void Delete()
         {
             
@@ -35,10 +35,49 @@ namespace Calendar.Models
         {
             
         }
-
+        /// <summary>
+        /// ~ successfully worked ~
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="task"></param>
         public static void Insert(DataModel.Date date,DataModel.Task task)
         {
-            
+            SqlConnection sqlCon = new SqlConnection(connectionString);
+
+            string insertQuery = "insert into Dates(Date_ID) values(@dateid)";
+            try
+            {
+                //Date Table
+                sqlCon.Open();
+                using (SqlCommand insertCommand = new SqlCommand(insertQuery, sqlCon))
+                {
+                    insertCommand.Parameters.AddWithValue("@dateid", date.Date_ID);
+
+                    insertCommand.ExecuteNonQuery();
+                }
+                Console.WriteLine("[Date] insertation is complete");
+
+
+                //Task Table
+                insertQuery = "insert into Tasks(Level,Alarm,TaskContent) values(@level,@alarm,@taskcontent)";
+                using (SqlCommand insertCommand = new SqlCommand(insertQuery, sqlCon))
+                {
+                    insertCommand.Parameters.AddWithValue("@level", task.Level);
+                    insertCommand.Parameters.AddWithValue("@alarm", task.Alarm_Date);
+                    insertCommand.Parameters.AddWithValue("@taskcontent", task.Content);
+
+                    insertCommand.ExecuteNonQuery();
+                }
+                Console.WriteLine("[Task] insertation is complete");
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine(x.Message);
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
         }
 
         /// <summary>
@@ -104,6 +143,92 @@ namespace Calendar.Models
             }
 
         }
+        /*
+        public void Edit(int Task_ID)
+        {
+            string editQuery = "update Tasks set Complete = 1 where Id=@taskid";
+            try
+            {
+                //Date Table
+                sqlCon.Open();
+                using (SqlCommand insertCommand = new SqlCommand(editQuery, sqlCon))
+                {
+                    insertCommand.Parameters.AddWithValue("@taskid", Task_ID);
+
+                    insertCommand.ExecuteNonQuery();
+                }
+                Console.WriteLine("[Task] edit is complete");
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine(x.Message);
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+
+        //IsJustFor => Edit TASK
+        public void Edit(int Task_ID, int Level, DateTime Alarm, string TaskContent)
+        {
+            string editQuery = "update Tasks set Level='" + Level + "', Alarm='" + Alarm.Date.ToString("yyyy-MM-dd") + "', TaskContent='" + TaskContent + "' where Id=@taskid";
+            try
+            {
+                //Date Table
+                sqlCon.Open();
+                using (SqlCommand insertCommand = new SqlCommand(editQuery, sqlCon))
+                {
+                    Console.WriteLine("ss");
+
+                    insertCommand.Parameters.AddWithValue("@taskid", Task_ID);
+
+                    insertCommand.ExecuteNonQuery();
+                }
+                Console.WriteLine("[Task] edit is complete");
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine(x.Message);
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+        public void Delete(int Task_ID)
+        {
+            //DELETE FROM DATES
+
+            string deleteQuery = "delete from Dates where Task_ID='" + Task_ID + "'";
+            try
+            {
+                //Date Table
+                sqlCon.Open();
+                using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, sqlCon))
+                {
+                    deleteCommand.ExecuteNonQuery();
+                }
+                Console.WriteLine("[Dates] delete is complete");
+
+                deleteQuery = "delete from Tasks where Id='" + Task_ID + "'";
+
+                using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, sqlCon))
+                {
+                    deleteCommand.ExecuteNonQuery();
+                }
+                Console.WriteLine("[Tasks] delete is complete");
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine(x.Message);
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+        */
 
         #endregion
 
@@ -334,7 +459,7 @@ namespace Calendar.Models
             #region Database
 
          
-            private static string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\bakon\OneDrive\Asztali gép\Infó\C#\Calendar\Datas.mdf;Integrated Security=True";
+            private static string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\bakon\OneDrive\Asztali gép\Infó\C#\Calendar\Data\CalendarDB.mdf;Integrated Security=True";
 
 
             #endregion

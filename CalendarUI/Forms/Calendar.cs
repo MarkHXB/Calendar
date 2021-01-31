@@ -1,4 +1,5 @@
-﻿using Calendar.Main;
+﻿using Calendar.Models;
+using Forms.Main;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,7 +19,7 @@ namespace Forms.CalendarForm
         private static List<int> napok_szam;
         private static int reDate = 1;
         public static Form form = null;
-        public static List<Task> selectedTask = new List<Task>();
+        public static List<DataModel.Task> selectedTask = new List<DataModel.Task>();
         public Calendar()
         {
             InitializeComponent();
@@ -27,18 +28,23 @@ namespace Forms.CalendarForm
 
         private void Calendar_Load(object sender, EventArgs e)
         {
-           
+            
         }
         
         private void button1_Click(object sender, EventArgs e)
         {
            
         }
-
+        private void RefreshDataBase()
+        {
+            TaskModel.Read();
+        }
         private void mouse_Move(object sender, MouseEventArgs e)
         {
             if (restoreData)
             {
+                RefreshDataBase();
+
                 form = this;
 
                 menuPanel_config();
@@ -46,8 +52,7 @@ namespace Forms.CalendarForm
                 calendar_config();
 
                 restoreData= false;
-
-                Task.ReadOnLoad();
+                
             }
             if (e.X <= menuPanel.Width)
             {
@@ -246,12 +251,6 @@ namespace Forms.CalendarForm
 
 
 
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            
-        }
-
         private void btnTaskForm_Click(object sender, EventArgs e)
         {
             if (choosedDay != 0)
@@ -264,6 +263,7 @@ namespace Forms.CalendarForm
         }
         private void dayBtn_Click(object sender, EventArgs e)
         {
+            
             List<Panel> panels = this.Controls.OfType<Panel>().ToList().Where(x => x.Name.Contains("dayP")).ToList();
             List<Label> dayName = new List<Label>();
 

@@ -8,6 +8,7 @@ namespace Calendar.Models
 {
     public class InputModel
     {
+
         #region FUNCTIONS
 
         public static bool checkSqlInjection(string input)

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3137A365-A671-4190-A5E1-FC0502FBADC5}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Calendar</RootNamespace>
+    <RootNamespace>CalendarLibrary</RootNamespace>
     <AssemblyName>Calendar</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>Calendar.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -67,7 +67,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main\_Task.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\InputModel.cs" />
     <Compile Include="Models\LogModel.cs" />

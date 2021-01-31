@@ -15,13 +15,7 @@ namespace Calendar
         [STAThread]
         static void Main()
         {
-            TaskModel.Read();
-
-            DataModel.Task one_task = TaskModel.SelectTaskByDayNumber_Row(2,26, true);
-
-            Console.WriteLine(one_task.Content);
-            
-            Console.ReadLine();
+            TaskModel.Read();         
         }
     }
 }
