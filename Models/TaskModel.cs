@@ -41,7 +41,10 @@ namespace Calendar.Models
             
         }
 
-        public static void Read(DataModel.Date date, DataModel.Task task)
+        /// <summary>
+        /// ~ successfully worked ~
+        /// </summary>
+        public static void Read()
         {   
             SqlConnection sqlCon = new SqlConnection(connectionString);
 
@@ -58,8 +61,8 @@ namespace Calendar.Models
                     {
                         Date_Table.Add(new DataModel.Date
                         {
-                            Date_ID = Convert.ToInt32(reader["Date_ID"]),
-                            Task_ID = Convert.ToInt32(reader["Task_ID"])
+                            Date_ID = (int)(reader["Date_ID"]),
+                            Task_ID = (int)(reader["Task_ID"])
                         });
                     }
 
@@ -80,8 +83,8 @@ namespace Calendar.Models
                         {
                             Id = (int)(reader["Id"]),
                             Level = (int)(reader["Level"]),
-                            Alarm_Date = (string)reader["Alarm"],
-                            Content=(string)reader["Content"],
+                            Alarm_Date = (DateTime)reader["Alarm"],
+                            Content=(string)reader["TaskContent"],
                             IsComplete=(int)reader["Complete"]
                         });
                     }
@@ -106,10 +109,24 @@ namespace Calendar.Models
 
         #region Functions
 
-        public List<DataModel.Task> SelectTaskByDayNumber_List(int dayNumber,bool checkIsComplete)
+        /// <summary>
+        /// ~ successfully worked ~
+        /// usage ==> List.DataModel.Task. task_list = TaskModel.SelectTaskByDayNumber_List(26, true);
+        /// </summary>
+        /// <param name="dayNumber"></param>
+        /// <param name="checkIsComplete"></param>
+        /// <returns></returns>
+        public static List<DataModel.Task> SelectTaskByDayNumber_List(int dayNumber,bool checkIsComplete)
         {
             List<DataModel.Task> selectedTask = new List<DataModel.Task>();
             List<int> Task_ids = new List<int>();
+
+            #region CHECK_LISTS_CONTENT
+
+            bool isTableListEmpty = !Date_Table.Any();
+            if (isTableListEmpty) { Read(); }
+
+            #endregion
 
             foreach (var item in Date_Table)
             {
@@ -157,10 +174,26 @@ namespace Calendar.Models
 
 	        return selectedTask;
         }
-        public DataModel.Task SelectTaskByDayNumber_Row(int dayNumber, bool checkIsComplete)
+
+        /// <summary>
+        /// ~ successfully worked ~
+        /// usage ==> DataModel.Task one_task = TaskModel.SelectTaskByDayNumber_Row(2,26, true);
+        /// </summary>
+        /// <param name="rowNumber"></param>
+        /// <param name="dayNumber"></param>
+        /// <param name="checkIsComplete"></param>
+        /// <returns></returns>
+        public static DataModel.Task SelectTaskByDayNumber_Row(int rowNumber, int dayNumber, bool checkIsComplete)
         {
             DataModel.Task selectedTask = new DataModel.Task();
             List<int> Task_ids = new List<int>();
+
+            #region CHECK_LISTS_CONTENT
+
+            bool isTableListEmpty = !Date_Table.Any();
+            if (isTableListEmpty) { Read(); }
+
+            #endregion
 
             foreach (var item in Date_Table)
             {
@@ -169,14 +202,18 @@ namespace Calendar.Models
                     Task_ids.Add(item.Task_ID);
                 }
             }
-
-            for (int i = 0; i < Task_ids.Count-readed_Row; i++)
+            bool emptyTaskList = !Task_ids.Any();
+            if (emptyTaskList)
+            {
+                return new DataModel.Task();
+            }
+            else
             {
                 foreach (var item in Task_Table)
                 {
                     if (checkIsComplete == true && item.IsComplete == 0)
                     {
-                        if (Task_ids[i] == item.Id)
+                        if (Task_ids[rowNumber - 1] == item.Id)
                         {
                             selectedTask.Id = item.Id;
                             selectedTask.Level = item.Level;
@@ -187,7 +224,7 @@ namespace Calendar.Models
                     }
                     else if (checkIsComplete == false && item.IsComplete == 1)
                     {
-                        if (Task_ids[i] == item.Id)
+                        if (Task_ids[rowNumber - 1] == item.Id)
                         {
                             selectedTask.Id = item.Id;
                             selectedTask.Level = item.Level;
@@ -208,25 +245,41 @@ namespace Calendar.Models
         /// </summary>
         public static void RefreshDbLists_Insert(DataModel.Date date_model, DataModel.Task task_model)
         {
-            //DATE TABLE
-
-            Date_Table.Add(new DataModel.Date
+            
+            bool isAvaliableTask = true;
+            foreach (var item in Date_Table)
             {
-                Date_ID = date_model.Date_ID,
-            });
-
-
-
-            //TASK TABLE
-
-            Task_Table.Add(new DataModel.Task
+                if(item.Task_ID == date_model.Task_ID)
+                {
+                    isAvaliableTask = false;
+                    return;
+                }
+            }
+            if (isAvaliableTask)
             {
-                Level = task_model.Level,
-                Alarm_Date = task_model.Alarm_Date,
-                Content = task_model.Content,
-                IsComplete = task_model.IsComplete
-            });
+                //DATE TABLE
+                Date_Table.Add(new DataModel.Date
+                {
+                    Date_ID = date_model.Date_ID,
+                    Task_ID=date_model.Task_ID
+                });
 
+                //TASK TABLE
+
+                Task_Table.Add(new DataModel.Task
+                {
+                    Level = task_model.Level,
+                    Alarm_Date = task_model.Alarm_Date,
+                    Content = task_model.Content,
+                    IsComplete = task_model.IsComplete
+                });
+                Console.WriteLine(task_model.Id+" successfully refreshed the local lists.");
+            }
+            else
+            {
+                Console.WriteLine(task_model.Id+" is already in database.");
+                return;
+            }
         }
         public static void RefreshDbLists_Edit(DataModel.Date date_model, DataModel.Task task_model)
         {
@@ -281,7 +334,9 @@ namespace Calendar.Models
 
 
         #region SelectFor_RowProp
+
         private int readed_Row = 0;
+
         #endregion
 
         public static List<DataModel.Date> Date_Table = new List<DataModel.Date>();

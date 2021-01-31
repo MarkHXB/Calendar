@@ -17,7 +17,7 @@ namespace Calendar.Models
         {
             public int Id { get; set; }
             public int Level { get; set; }
-            public string Alarm_Date { get; set; }
+            public DateTime Alarm_Date { get; set; }
             public string Content { get; set; }
             public int IsComplete { get; set; }
         }

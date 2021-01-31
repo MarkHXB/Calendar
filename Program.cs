@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calendar.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,9 +15,18 @@ namespace Calendar
         [STAThread]
         static void Main()
         {
+            /*
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Calendar());
+            */
+            TaskModel.Read();
+
+            DataModel.Task one_task = TaskModel.SelectTaskByDayNumber_Row(2,26, true);
+
+            Console.WriteLine(one_task.Content);
+            
+            Console.ReadLine();
         }
     }
 }
