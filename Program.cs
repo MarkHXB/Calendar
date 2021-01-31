@@ -15,11 +15,6 @@ namespace Calendar
         [STAThread]
         static void Main()
         {
-            /*
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Calendar());
-            */
             TaskModel.Read();
 
             DataModel.Task one_task = TaskModel.SelectTaskByDayNumber_Row(2,26, true);

@@ -1,5 +1,5 @@
 ﻿
-namespace Calendar
+namespace Forms.Form1
 {
     partial class Form1
     {

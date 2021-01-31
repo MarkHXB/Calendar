@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using WinFormAnimation;
 
-namespace Calendar
+namespace Forms.Form1
 {
     public partial class Form1 : Form
     {

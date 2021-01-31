@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Calendar
+namespace Forms.CalendarForm
 {
     public partial class Calendar : Form
     {

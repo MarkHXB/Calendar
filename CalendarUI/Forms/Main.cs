@@ -1,11 +1,10 @@
-﻿using Calendar.Main;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Calendar
+namespace Forms.Main
 {
     public partial class MainForm : Form
     { 

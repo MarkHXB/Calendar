@@ -67,60 +67,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConvertTo.cs" />
-    <Compile Include="Dates.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Calendar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Calendar.Designer.cs">
-      <DependentUpon>Calendar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ListTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ListTest.Designer.cs">
-      <DependentUpon>ListTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Main.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Main\AddSection.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main\AddSection.Designer.cs">
-      <DependentUpon>AddSection.cs</DependentUpon>
-    </Compile>
     <Compile Include="Main\_Task.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\InputModel.cs" />
     <Compile Include="Models\LogModel.cs" />
+    <Compile Include="Models\StyleModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Calendar.resx">
-      <DependentUpon>Calendar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ListTest.resx">
-      <DependentUpon>ListTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main\AddSection.resx">
-      <DependentUpon>AddSection.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -149,12 +103,12 @@
     <None Include="Assets\add_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Datas.mdf">
+    <Content Include="Data\CalendarDB.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Datas_log.ldf">
+    <Content Include="Data\CalendarDB_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>Datas.mdf</DependentUpon>
+      <DependentUpon>CalendarDB.mdf</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>

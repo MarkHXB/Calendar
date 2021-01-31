@@ -258,6 +258,7 @@ namespace Calendar.Models
             if (isAvaliableTask)
             {
                 //DATE TABLE
+
                 Date_Table.Add(new DataModel.Date
                 {
                     Date_ID = date_model.Date_ID,
@@ -283,27 +284,33 @@ namespace Calendar.Models
         }
         public static void RefreshDbLists_Edit(DataModel.Date date_model, DataModel.Task task_model)
         {
-            //DATE table
+            bool thereIsData = false;
 
+            //DATE table
+            foreach (var item in Date_Table)
+            {
+                if (item.Date_ID == date_model.Date_ID) { thereIsData = true; }
+            }
 
             //TASK table
-            //ezt még valahogy javítanom kell
-            foreach (var item in Task_Table)
+            if (thereIsData)
             {
-                if (item.Level == task_model.Level &&
-                    item.Alarm_Date == task_model.Alarm_Date &&
-                    item.Content == task_model.Content)
+                foreach (var item in Task_Table)
                 {
-                    item.Level = task_model.Level;
-                    item.Alarm_Date = task_model.Alarm_Date;
-                    item.Content = task_model.Content;
+                    if (item.Id == task_model.Id)
+                    {
+                        item.Level = task_model.Level;
+                        item.Alarm_Date = task_model.Alarm_Date;
+                        item.Content = task_model.Content;
+                        item.IsComplete = task_model.IsComplete;
+                    }
                 }
             }
         }
         public static void RefreshDbLists_Delete(DataModel.Date date_model, DataModel.Task task_model)
         {
             //DATE TABLE
-            bool isInList_1 = Date_Table.Any(item => item.Task_ID == date_model.Date_ID);
+            bool isInList_1 = Date_Table.Any(item => item.Task_ID == date_model.Task_ID);
 
             if (isInList_1 == true)
             {
