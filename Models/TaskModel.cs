@@ -18,6 +18,11 @@ namespace Calendar.Models
     {
         #region Constructors
 
+        public TaskModel(int selectedDayNumber)
+        {
+
+        }
+
         public TaskModel(DataModel.Date date,DataModel.Task task)
         {
             Insert(date,task);
@@ -143,6 +148,7 @@ namespace Calendar.Models
             }
 
         }
+
         /*
         public void Edit(int Task_ID)
         {
@@ -235,7 +241,7 @@ namespace Calendar.Models
         #region Functions
 
         /// <summary>
-        /// ~ successfully worked ~
+        /// Collect all the tasks about that day and return a Task List which contains the data.
         /// usage ==> List.DataModel.Task. task_list = TaskModel.SelectTaskByDayNumber_List(26, true);
         /// </summary>
         /// <param name="dayNumber"></param>
@@ -452,6 +458,11 @@ namespace Calendar.Models
             }
         }
 
+        public static void CheckGlobalDbIntegrity()
+        {
+            if(Date_Table.Count == 0) { Read(); }
+        }
+
         #endregion
 
         #region Properties
@@ -473,6 +484,8 @@ namespace Calendar.Models
 
         public static List<DataModel.Date> Date_Table = new List<DataModel.Date>();
         public static List<DataModel.Task> Task_Table = new List<DataModel.Task>();
+
+        public static List<DataModel.Task> Selected_Tasks = new List<DataModel.Task>();
 
         #endregion
     }
