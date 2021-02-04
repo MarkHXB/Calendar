@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Forms.Form1;
 
 namespace CalendarUI
 {
@@ -16,7 +17,7 @@ namespace CalendarUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.Form1.Form1());
+            Application.Run(new Form1());
         }
     }
 }

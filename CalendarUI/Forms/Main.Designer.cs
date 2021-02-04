@@ -37,8 +37,11 @@ namespace Forms.Main
             this.label2 = new System.Windows.Forms.Label();
             this.currentDayName = new System.Windows.Forms.Label();
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.menuPanel_1.SuspendLayout();
             this.menuPanel_2.SuspendLayout();
+            this.mainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuPanel_1
@@ -109,12 +112,35 @@ namespace Forms.Main
             // 
             this.mainPanel.AutoScroll = true;
             this.mainPanel.BackColor = System.Drawing.Color.White;
+            this.mainPanel.Controls.Add(this.button2);
+            this.mainPanel.Controls.Add(this.button1);
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(214, 91);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(979, 510);
             this.mainPanel.TabIndex = 16;
             this.mainPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseMove);
+            // 
+            // button1
+            // 
+            this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Location = new System.Drawing.Point(81, 157);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(31, 25);
+            this.button1.TabIndex = 0;
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.button2.Location = new System.Drawing.Point(170, 157);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(31, 25);
+            this.button2.TabIndex = 1;
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -136,6 +162,7 @@ namespace Forms.Main
             this.menuPanel_1.ResumeLayout(false);
             this.menuPanel_2.ResumeLayout(false);
             this.menuPanel_2.PerformLayout();
+            this.mainPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -148,5 +175,7 @@ namespace Forms.Main
         private System.Windows.Forms.Label currentDayName;
         private System.Windows.Forms.Button btnBackForm;
         private System.Windows.Forms.Panel mainPanel;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
     }
 }

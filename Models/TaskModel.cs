@@ -341,7 +341,7 @@ namespace Calendar.Models
             else
             {
                 foreach (var item in Task_Table)
-                {
+                {        
                     if (checkIsComplete == true && item.IsComplete == 0)
                     {
                         if (Task_ids[rowNumber - 1] == item.Id)
