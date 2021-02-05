@@ -20,9 +20,7 @@ namespace Forms.Form1
         public int MenuOptions = 1;
         public int MenuOptionsRow = 1;
 
-
         private int CurrentMonthNumber = 1;
-
 
 
         public Form1()
@@ -105,7 +103,7 @@ namespace Forms.Form1
             {
                 for (int i = 0; i < columns; i++)
                 {
-                    //THIS ROW IS THE TITLE ROW
+                    //THIS ROW IS THE TITLE ROW ~ DAYS TITLE ~
                     if (j == 0)
                     {
                         Label title = new Label()
@@ -117,6 +115,8 @@ namespace Forms.Form1
                         };
                         tableLayoutPanel1.Controls.Add(title, i, j);
                     }
+
+                    //STRIP MENU
                     else if (j == MenuOptionsRow && i== MenuOptions-1)
                     {
                         Panel head = new Panel()
@@ -246,8 +246,8 @@ namespace Forms.Form1
             //2.: Convert DayPanels name into number
             daysNumber =CollectDaysNumber();
 
-            //3.: Seeking unfinishedTasks in DB
-            Dictionary<DataModel.Task, int> unFinishedTasks = CollectUnfinishedTasks(daysNumber);
+            //3.: Seeking unfinished Tasks in DB
+            Dictionary<DataModel.Task, int> unFinishedTasks = CollectUnfinishedTasks(daysNumber,CurrentMonthNumber);
 
             //4.: Fill the root panels( day panels ) with subpanels ( flags )
             DrawTasksPanel(unFinishedTasks, daysNumber);
@@ -269,7 +269,7 @@ namespace Forms.Form1
             return days;
         }
 
-        private Dictionary<DataModel.Task, int> CollectUnfinishedTasks(List<int>daysNumber)
+        private Dictionary<DataModel.Task, int> CollectUnfinishedTasks(List<int>daysNumber,int monthNumber)
         {
             Dictionary<DataModel.Task,int> unFinishedTasks =new Dictionary<DataModel.Task, int>();
 
@@ -278,7 +278,9 @@ namespace Forms.Form1
                 int taskNumber = 0;
                 for (int j = 0; j < TaskModel.Date_Table.Count; j++)
                 {
-                    if (daysNumber[i] == TaskModel.Date_Table[j].Date_ID && TaskModel.Task_Table[j].IsComplete == 0)
+                    if (daysNumber[i] == TaskModel.Date_Table[j].Date_ID 
+                        && TaskModel.Task_Table[j].IsComplete == 0
+                        && TaskModel.Date_Table[j].Month_ID == monthNumber)
                     {
                         taskNumber++;
 
