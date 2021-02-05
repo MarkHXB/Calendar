@@ -41,6 +41,9 @@ namespace Forms.Form1
             //4.: Load the data
             LoadUserData_OnLoad();
         }
+
+        #region LoadUserData_OnLoad MAIN functions
+
         private void CalcutaMonthDays(int Month)
         {
             //SET CURRENT Month nUmber
@@ -254,8 +257,10 @@ namespace Forms.Form1
             
         }
 
+        #endregion
 
-        #region LoadUserData_OnLoad functions
+
+        #region LoadUserData_OnLoad SUB functions
 
         private List<int> CollectDaysNumber()
         {

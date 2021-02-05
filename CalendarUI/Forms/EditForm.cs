@@ -19,6 +19,15 @@ namespace CalendarUI.Forms
 
         private void InsertForm_Load(object sender, EventArgs e)
         {
+           
+        }
+
+        private void label1_Paint(object sender, PaintEventArgs e)
+        {
+
+
+            e.Graphics.DrawRectangle(new Pen(Color.Blue,5), 0, 0, label1.Width - 1, label1.Height - 1);
+
 
         }
     }
