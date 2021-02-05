@@ -105,8 +105,9 @@ namespace Calendar.Models
                     {
                         Date_Table.Add(new DataModel.Date
                         {
-                            Date_ID = (int)(reader["Date_ID"]),
-                            Task_ID = (int)(reader["Task_ID"])
+                            Date_ID = (int)reader["Date_ID"],
+                            Task_ID = (int)reader["Task_ID"],
+                            Month_ID=(int)reader["Month_ID"]
                         });
                     }
 
@@ -247,7 +248,7 @@ namespace Calendar.Models
         /// <param name="dayNumber"></param>
         /// <param name="checkIsComplete"></param>
         /// <returns></returns>
-        public static List<DataModel.Task> SelectTaskByDayNumber_List(int dayNumber,bool checkIsComplete)
+        public static List<DataModel.Task> SelectTaskByDayNumber_List(int dayNumber,int monthNumber,bool checkIsComplete)
         {
             List<DataModel.Task> selectedTask = new List<DataModel.Task>();
             List<int> Task_ids = new List<int>();
@@ -261,7 +262,7 @@ namespace Calendar.Models
 
             foreach (var item in Date_Table)
             {
-                if (dayNumber == item.Date_ID)
+                if (dayNumber == item.Date_ID && monthNumber == item.Month_ID)
                 {
                     Task_ids.Add(item.Task_ID);
                 }             
@@ -314,7 +315,7 @@ namespace Calendar.Models
         /// <param name="dayNumber"></param>
         /// <param name="checkIsComplete"></param>
         /// <returns></returns>
-        public static DataModel.Task SelectTaskByDayNumber_Row(int rowNumber, int dayNumber, bool checkIsComplete)
+        public static DataModel.Task SelectTaskByDayNumber_Row(int rowNumber, int dayNumber,int monthNumber, bool checkIsComplete)
         {
             DataModel.Task selectedTask = new DataModel.Task();
             List<int> Task_ids = new List<int>();
@@ -328,7 +329,7 @@ namespace Calendar.Models
 
             foreach (var item in Date_Table)
             {
-                if (dayNumber == item.Date_ID)
+                if (dayNumber == item.Date_ID && monthNumber==item.Month_ID)
                 {
                     Task_ids.Add(item.Task_ID);
                 }

@@ -12,6 +12,7 @@ namespace Calendar.Models
         {
             public int Task_ID { get; set; }
             public int Date_ID { get; set; }
+            public int Month_ID { get; set; }
         }
         public class Task
         {

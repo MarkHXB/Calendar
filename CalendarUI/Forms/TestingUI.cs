@@ -20,19 +20,22 @@ namespace Forms.Form1
         public int MenuOptions = 1;
         public int MenuOptionsRow = 1;
 
+
+        private int CurrentMonthNumber = 1;
+
+
+
         public Form1()
         {
             InitializeComponent();
         }
         private void LoadCalendar_OnLoad()
         {
+            //1.: Set month days
             CalcutaMonthDays(DateTime.Now.Month);
 
-            //1.: Generate Calendar
+            //2.: Generate Calendar
             GenerateCalendarTemplate();
-
-            //2.: Set month days
-            
 
             //3.: Position that
             SizeModified();
@@ -42,6 +45,9 @@ namespace Forms.Form1
         }
         private void CalcutaMonthDays(int Month)
         {
+            //SET CURRENT Month nUmber
+            CurrentMonthNumber = (int)DateTime.Now.Month;
+
             int monthDaysCount = CurrentMonthDayCount(Month);
             int counter = 0;
 
@@ -149,7 +155,8 @@ namespace Forms.Form1
                         };
 
                         //Events
-
+                        prevBtn.Click += prevMonth_Click;
+                        nextBtn.Click += nextMonth_Click;
 
                         //Locations
                         prevBtn.Location = new Point(prevBtn.Location.X,(head.Height/2)-prevBtn.Height/2);
@@ -198,7 +205,8 @@ namespace Forms.Form1
 
             #endregion
         }
-        
+
+       
         private void SizeModified()
         {
             int rows = tableLayoutPanel1.RowCount;
@@ -275,7 +283,7 @@ namespace Forms.Form1
                         taskNumber++;
 
                         unFinishedTasks.Add(TaskModel.SelectTaskByDayNumber_Row(taskNumber,
-                            daysNumber[i], true),daysNumber[i]);
+                            daysNumber[i], CurrentMonthNumber,true),daysNumber[i]);
                     }
                 }
             }
@@ -460,10 +468,11 @@ namespace Forms.Form1
 
         private void dayPanel_Click(object sender, EventArgs e)
         {
+            
             Panel rootPanel = (Panel)sender;
             int selectDayNumber = InputModel.Int(rootPanel.Name);
 
-            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(selectDayNumber, true);
+            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(selectDayNumber,CurrentMonthNumber, true);
 
             try
             {
@@ -475,6 +484,7 @@ namespace Forms.Form1
             {
                 MessageBox.Show(x.Message);
             }
+            
         }
 
         private void SelectedFlag_Click(object sender, EventArgs e)
@@ -485,6 +495,17 @@ namespace Forms.Form1
             MessageBox.Show(InputModel.Int(root.Name).ToString());
         }
 
+        #endregion
+
+        #region Monts
+        private void nextMonth_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void prevMonth_Click(object sender, EventArgs e)
+        {
+        }
         #endregion
 
         #endregion
