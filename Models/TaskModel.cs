@@ -306,6 +306,49 @@ namespace Calendar.Models
 
 	        return selectedTask;
         }
+        public static List<DataModel.Task> SelectTaskByDayNumber_List(int dayNumber, int monthNumber)
+        {
+            List<DataModel.Task> selectedTask = new List<DataModel.Task>();
+            List<int> Task_ids = new List<int>();
+
+            #region CHECK_LISTS_CONTENT
+
+            bool isTableListEmpty = !Date_Table.Any();
+            if (isTableListEmpty) { Read(); }
+
+            #endregion
+
+            List<int> selectedTaskID = new List<int>();
+
+            foreach (var item in Date_Table)
+            {
+                if(item.Date_ID == dayNumber && item.Month_ID == monthNumber)
+                {
+                    selectedTaskID.Add(item.Task_ID);
+                }
+            }
+
+            for (int i = 0; i < selectedTaskID.Count; i++)
+            {
+                foreach (var item in Task_Table)
+                {
+                    if (item.Id == selectedTaskID[i])
+                    {
+                        selectedTask.Add(new DataModel.Task
+                        {
+                            Id=item.Id,
+                            Level=item.Level,
+                            Alarm_Date=item.Alarm_Date,
+                            Content=item.Content,
+                            IsComplete=item.IsComplete
+                        });
+                    }
+                }
+            }
+            
+
+            return selectedTask;
+        }
 
         /// <summary>
         /// ~ successfully worked ~
@@ -370,6 +413,56 @@ namespace Calendar.Models
 
 
             return selectedTask;
+        }
+
+        /// <summary>
+        /// A function to get the number of tasks about a day [Completed].
+        /// </summary>
+        /// <returns></returns>
+        public static int GetCurrentDayTaskNumber_Completed(int MonthNumber,int DayNumber)
+        {
+            int output = 0;
+            int index = 0;
+
+            foreach (var item in Date_Table)
+            {
+                if (item.Month_ID == MonthNumber && item.Date_ID == DayNumber)
+                {
+                    if (Task_Table[index].IsComplete == 1)
+                    {
+                        output++;
+                    }
+                }
+
+                index++;
+            }
+
+            return output;
+        }
+
+        /// <summary>
+        /// A function to get the number of tasks about a day [NotCompleted].
+        /// </summary>
+        /// <returns></returns>
+        public static int GetCurrentDayTaskNumber_Not_Completed(int MonthNumber, int DayNumber)
+        {
+            int output = 0;
+            int index = 0;
+
+            foreach (var item in Date_Table)
+            {
+                if (item.Month_ID == MonthNumber && item.Date_ID == DayNumber)
+                {
+                    if (Task_Table[index].IsComplete == 0)
+                    {
+                        output++;
+                    }
+                }
+
+                index++;
+            }
+
+            return output;
         }
 
         /// <summary>

@@ -496,6 +496,8 @@ namespace Forms.Form1
                 MessageBox.Show(TaskModel.Selected_Tasks[1].Content);
                 EditForm form = new EditForm();
                 form.Show();
+
+                this.Hide();
             }
             catch (Exception x)
             {

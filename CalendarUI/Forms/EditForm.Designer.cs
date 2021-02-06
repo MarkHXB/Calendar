@@ -32,10 +32,8 @@ namespace CalendarUI.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditForm));
             this.panel2 = new System.Windows.Forms.Panel();
             this.showPnTaskPn = new System.Windows.Forms.Panel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.testPanel = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.showPnSuccededPn = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -51,19 +49,18 @@ namespace CalendarUI.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.backBtn = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.showPnTaskPn.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            this.testPanel.SuspendLayout();
             this.showPnSuccededPn.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.showPnTitlePn.SuspendLayout();
             this.panel3.SuspendLayout();
             this.editPnTitlePn.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
@@ -81,55 +78,34 @@ namespace CalendarUI.Forms
             // 
             this.showPnTaskPn.AutoScroll = true;
             this.showPnTaskPn.BackColor = System.Drawing.Color.White;
+            this.showPnTaskPn.Controls.Add(this.label5);
             this.showPnTaskPn.Controls.Add(this.pictureBox4);
             this.showPnTaskPn.Controls.Add(this.pictureBox3);
-            this.showPnTaskPn.Controls.Add(this.testPanel);
             this.showPnTaskPn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.showPnTaskPn.Location = new System.Drawing.Point(0, 86);
             this.showPnTaskPn.Name = "showPnTaskPn";
             this.showPnTaskPn.Size = new System.Drawing.Size(504, 579);
             this.showPnTaskPn.TabIndex = 5;
             // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(12, 151);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(29, 116);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 2;
+            this.pictureBox4.TabStop = false;
+            // 
             // pictureBox3
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(12, 6);
+            this.pictureBox3.Location = new System.Drawing.Point(12, 42);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(29, 116);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 1;
             this.pictureBox3.TabStop = false;
-            // 
-            // testPanel
-            // 
-            this.testPanel.Controls.Add(this.button1);
-            this.testPanel.Controls.Add(this.label4);
-            this.testPanel.Controls.Add(this.textBox1);
-            this.testPanel.Location = new System.Drawing.Point(64, 18);
-            this.testPanel.Name = "testPanel";
-            this.testPanel.Size = new System.Drawing.Size(430, 97);
-            this.testPanel.TabIndex = 0;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label4.Location = new System.Drawing.Point(166, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(83, 25);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "jan. 14.";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBox1.Location = new System.Drawing.Point(14, 37);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(398, 31);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
             // 
             // showPnSuccededPn
             // 
@@ -168,18 +144,20 @@ namespace CalendarUI.Forms
             // succededLabel
             // 
             this.succededLabel.AutoSize = true;
+            this.succededLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.succededLabel.Location = new System.Drawing.Point(464, 3);
             this.succededLabel.Name = "succededLabel";
-            this.succededLabel.Size = new System.Drawing.Size(30, 13);
+            this.succededLabel.Size = new System.Drawing.Size(34, 15);
             this.succededLabel.TabIndex = 6;
             this.succededLabel.Text = "point";
             // 
             // unsuccededLabel
             // 
             this.unsuccededLabel.AutoSize = true;
+            this.unsuccededLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.unsuccededLabel.Location = new System.Drawing.Point(196, 3);
             this.unsuccededLabel.Name = "unsuccededLabel";
-            this.unsuccededLabel.Size = new System.Drawing.Size(30, 13);
+            this.unsuccededLabel.Size = new System.Drawing.Size(34, 15);
             this.unsuccededLabel.TabIndex = 5;
             this.unsuccededLabel.Text = "point";
             // 
@@ -205,6 +183,8 @@ namespace CalendarUI.Forms
             // 
             // showPnTitlePn
             // 
+            this.showPnTitlePn.BackColor = System.Drawing.Color.White;
+            this.showPnTitlePn.Controls.Add(this.backBtn);
             this.showPnTitlePn.Controls.Add(this.dayLabel);
             this.showPnTitlePn.Controls.Add(this.monthLabel);
             this.showPnTitlePn.Dock = System.Windows.Forms.DockStyle.Top;
@@ -217,7 +197,7 @@ namespace CalendarUI.Forms
             // 
             this.dayLabel.AutoSize = true;
             this.dayLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.dayLabel.Location = new System.Drawing.Point(221, 38);
+            this.dayLabel.Location = new System.Drawing.Point(212, 38);
             this.dayLabel.Name = "dayLabel";
             this.dayLabel.Size = new System.Drawing.Size(40, 24);
             this.dayLabel.TabIndex = 1;
@@ -284,25 +264,27 @@ namespace CalendarUI.Forms
             this.label1.TabIndex = 0;
             this.label1.Text = "Módosítás";
             // 
-            // pictureBox4
+            // label5
             // 
-            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(12, 115);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(29, 116);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox4.TabIndex = 2;
-            this.pictureBox4.TabStop = false;
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label5.Location = new System.Drawing.Point(226, 6);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(87, 18);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Feladatok:";
             // 
-            // button1
+            // backBtn
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button1.Location = new System.Drawing.Point(174, 71);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 26);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Kész";
-            this.button1.UseVisualStyleBackColor = true;
+            this.backBtn.BackColor = System.Drawing.Color.Transparent;
+            this.backBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("backBtn.BackgroundImage")));
+            this.backBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.backBtn.Location = new System.Drawing.Point(12, 15);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(61, 36);
+            this.backBtn.TabIndex = 2;
+            this.backBtn.UseVisualStyleBackColor = false;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
             // 
             // EditForm
             // 
@@ -316,9 +298,9 @@ namespace CalendarUI.Forms
             this.Load += new System.EventHandler(this.InsertForm_Load);
             this.panel2.ResumeLayout(false);
             this.showPnTaskPn.ResumeLayout(false);
+            this.showPnTaskPn.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            this.testPanel.ResumeLayout(false);
-            this.testPanel.PerformLayout();
             this.showPnSuccededPn.ResumeLayout(false);
             this.showPnSuccededPn.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -328,7 +310,6 @@ namespace CalendarUI.Forms
             this.panel3.ResumeLayout(false);
             this.editPnTitlePn.ResumeLayout(false);
             this.editPnTitlePn.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -351,11 +332,9 @@ namespace CalendarUI.Forms
         private System.Windows.Forms.Label monthLabel;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Panel showPnTaskPn;
-        private System.Windows.Forms.Panel testPanel;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button backBtn;
     }
 }
