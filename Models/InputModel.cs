@@ -111,6 +111,26 @@ namespace Calendar.Models
             return output;
         }
 
+        public static string GetMonthName(int MonthNumber)
+        {
+            string output = "";
+            DateTime time = new DateTime(DateTime.Now.Year, MonthNumber,DateTime.Now.Day);
+
+            output = time.ToString("MMMM");
+
+            return output;
+        }
+
+        public static string GetMonthDayName(int MonthNumber, int DayNumber)
+        {
+            string output = "";
+            DateTime time = new DateTime(DateTime.Now.Year, MonthNumber, DayNumber);
+
+            output = time.ToString("dddd");
+
+            return output;
+        }
+
         #endregion
 
     }

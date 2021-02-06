@@ -17,7 +17,7 @@ namespace CalendarUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.EditForm());
+            Application.Run(new Form1());
         }
     }
 }

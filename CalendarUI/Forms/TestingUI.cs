@@ -22,6 +22,13 @@ namespace Forms.Form1
 
         private int CurrentMonthNumber = 1;
 
+        #region ForEditForm
+
+        public static int MonthNumber = 1;
+        public static int SelectedMonthNumber = 1;
+
+        #endregion
+
 
         public Form1()
         {
@@ -478,6 +485,9 @@ namespace Forms.Form1
             
             Panel rootPanel = (Panel)sender;
             int selectDayNumber = InputModel.Int(rootPanel.Name);
+
+            MonthNumber = DateTime.Now.Month;
+            SelectedMonthNumber = selectDayNumber;
 
             TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(selectDayNumber,CurrentMonthNumber, true);
 
