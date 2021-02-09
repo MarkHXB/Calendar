@@ -193,6 +193,8 @@ namespace CalendarUI.Forms
                         }
                     }
                 }
+
+                RefreshForm();
             }
             catch (Exception x)
             {
@@ -224,6 +226,8 @@ namespace CalendarUI.Forms
                         }         
                     }    
                 }
+
+                RefreshForm();
             }
             catch (Exception x)
             {
@@ -366,6 +370,26 @@ namespace CalendarUI.Forms
 
                 counter++;
             }
+
+            GenerateAddPanel();
+        }
+
+        private void GenerateAddPanel()
+        {
+            addCurrentDayPanel.Location = new Point(addCurrentDayPanel.Location.X, lastTaskPanelPosY + addCurrentDayPanel.Height/2);
+            addCurrentDayPanel.Enabled = true;
+            addCurrentDayPanel.Visible = true;
+        }
+
+        private void RefreshForm()
+        {
+            TaskModel.RefreshLocalDB();
+
+            this.Hide();
+
+            EditForm form = new EditForm();   
+
+            form.Show();
         }
 
 
@@ -392,7 +416,7 @@ namespace CalendarUI.Forms
         }
         #endregion
 
-
+        
         private void InsertForm_Load(object sender, EventArgs e)
         {
             sMonthNumber = Form1.MonthNumber;
@@ -418,11 +442,14 @@ namespace CalendarUI.Forms
 
         private void backBtn_Click(object sender, EventArgs e)
         {
-            Form1.Refresh();
-            Form1.form.Show();
+            Form1 form = new Form1();
+            form.Show();
 
             this.Hide();
         }
+
+
+        #region  statusPanel
 
         private void statusBtn_Click(object sender, EventArgs e)
         {
@@ -462,7 +489,6 @@ namespace CalendarUI.Forms
             };         
         }
 
-        #region StatusPanels
 
         private Panel GenerateModifyPanel()
         {
@@ -697,6 +723,161 @@ namespace CalendarUI.Forms
             }
             return panel;
         }
+        private Panel GenerateInsertPanel(bool addCurrent)
+        {
+            Panel panel = null;
+
+            bool needed = true;
+
+            for (int i = 0; i < statusPanel.Controls.Count; i++)
+            {
+                if (statusPanel.Controls[i].Name == "insertPanel")
+                {
+                    needed = false;
+                }
+                if (statusPanel.Controls[i].Name.Contains("modifyPanel") || statusPanel.Controls[i].Name.Contains("deletePanel"))
+                {
+                    statusPanel.Controls.Remove(statusPanel.Controls[i]);
+                    needed = true;
+                }
+            }
+
+            if (needed)
+            {
+                panel = new Panel()
+                {
+                    Name = "insertPanel",
+                    Size = new Size(340, 312),
+                    BackColor = Color.White,
+                    Location = new Point(22, 176)
+                };
+
+                Label wTitle = new Label()
+                {
+                    Text = "Fontosság",
+                    Font = new Font(new FontFamily(this.Font.Name), 11f),
+                    Name = "insertAlarmDateTitle",
+                    Location = new Point(77, 23)
+                };
+
+                RadioButton lvl1 = new RadioButton()
+                {
+                    Name = "insertAlarmLvl1",
+                    Text = "Ráér",
+                    Location = new Point(68, 66),
+                    Font = new Font(new FontFamily(this.Font.Name), 8f),
+                };
+                RadioButton lvl2 = new RadioButton()
+                {
+                    Name = "insertAlarmLvl2",
+                    Text = "Fontos",
+                    Location = new Point(68, 104),
+                    Font = new Font(new FontFamily(this.Font.Name), 8f),
+                };
+                RadioButton lvl3 = new RadioButton()
+                {
+                    Name = "insertAlarmLvl3",
+                    Text = "Sürgős",
+                    Location = new Point(68, 138),
+                    Font = new Font(new FontFamily(this.Font.Name), 8f),
+                };
+                Label cTitle = new Label()
+                {
+                    Text = "Határidő",
+                    Font = new Font(new FontFamily(this.Font.Name), 11f),
+                    Name = "insertContentTitle",
+                    Location = new Point(190, 23)
+                };
+
+                #region ComboBox_Year
+
+                ComboBox cbYear = new ComboBox()
+                {
+                    Name = "insertDateYear",
+                    Text = DateTime.Now.Year.ToString(),
+                    Font = new Font(new FontFamily(this.Font.Name), 14f),
+                    Size = new Size(63, 32),
+                    Location = new Point(194, 57)
+                };
+                IEnumerable<int> enumerableYear = Enumerable.Range(DateTime.Now.Year, 2050);
+                int[] yearNumbers = enumerableYear.ToArray();
+                for (int i = 0; i < yearNumbers.Length; i++)
+                {
+                    cbYear.Items.Add(yearNumbers[i]);
+                }
+
+                #endregion
+
+                #region ComboBox_Month
+
+                ComboBox cbMonth = new ComboBox()
+                {
+                    Name = "insertDateMonth",
+                    Text = DateTime.Now.Month.ToString(),
+                    Font = new Font(new FontFamily(this.Font.Name), 14f),
+                    Size = new Size(63, 32),
+                    Location = new Point(194, 95)
+                };
+                IEnumerable<int> enumerableMonth = Enumerable.Range(1, 12);
+                int[] monthNumbers = enumerableMonth.ToArray();
+                for (int i = 0; i < monthNumbers.Length; i++)
+                {
+                    cbMonth.Items.Add(monthNumbers[i]);
+                }
+
+                #endregion
+
+                #region ComboBox_Day
+
+                ComboBox cbDay = new ComboBox()
+                {
+                    Name = "insertDateDay",
+                    Text = Form1.SelectedMonthNumber.ToString(),
+                    Font = new Font(new FontFamily(this.Font.Name), 14f),
+                    Size = new Size(63, 32),
+                    Location = new Point(194, 133)
+                };
+                int days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                IEnumerable<int> enumerableDay = Enumerable.Range(1, days);
+                int[] dayNumbers = enumerableDay.ToArray();
+                for (int i = 0; i < dayNumbers.Length; i++)
+                {
+                    cbDay.Items.Add(dayNumbers[i]);
+                }
+
+                #endregion
+
+                TextBox content = new TextBox()
+                {
+                    Name = "insertContent",
+                    Size = new Size(309, 51),
+                    Location = new Point(15, 192),
+                    Multiline = true,
+                    Font = new Font(new FontFamily(this.Font.Name), 12f),
+                    ScrollBars = ScrollBars.Vertical
+                };
+
+                Button confirmBtn = new Button()
+                {
+                    Name = "insertBtn",
+                    Text = "Hozzáad",
+                    Location = new Point(122, 265),
+                    Font = new Font(new FontFamily(this.Font.Name), 12f),
+                    Size = new Size(93, 26)
+                };
+
+                confirmBtn.Click += InsertTaskBtn_Click;
+
+                Control[] ctl =
+                {
+                wTitle,lvl1,lvl2,lvl3,cTitle,cbYear,cbMonth,cbDay,
+                content, confirmBtn
+                };
+
+                panel.Controls.AddRange(ctl);
+            }
+            return panel;
+        }
         private Panel GenerateDeletePanel()
         {
             Panel panel = null;
@@ -766,9 +947,6 @@ namespace CalendarUI.Forms
             return panel;
         }
 
-        
-        #endregion
-
         private void SubmitChanges_Click(object sender, EventArgs e)
         {
             try
@@ -780,6 +958,8 @@ namespace CalendarUI.Forms
                 SelectedRow_Task.Content = contentBox.Text;
 
                 TaskModel.Edit(SelectedRow_Date, SelectedRow_Task);
+
+                RefreshForm();
             }
             catch (Exception x)
             {
@@ -854,7 +1034,7 @@ namespace CalendarUI.Forms
             Alarm = GetherAlarmInfo(insertPanel);
 
             bool _content = InputModel.checkSqlInjection(GetherContentInfo(insertPanel));
-            if (_content) { Console.WriteLine("baj van"); }
+            if (_content) { MessageBox.Show("Jelentve lett az adminisztrátórnak"); return; }
             else { Content = GetherContentInfo(insertPanel); }
 
             DataModel.Task insertModel = new DataModel.Task();
@@ -863,6 +1043,8 @@ namespace CalendarUI.Forms
             insertModel.Content = Content;
 
             TaskModel.Insert(null, insertModel);
+
+            RefreshForm();
         }
         private void deleteBtn_Yes_Click(object sender, EventArgs e)
         {
@@ -871,16 +1053,25 @@ namespace CalendarUI.Forms
                 if (SelectedRow_Task != null)
                 {
                     TaskModel.Delete(SelectedRow_Task);
-                }
+                    RefreshForm();
+                } 
             }
             catch (Exception x)
             {
                 MessageBox.Show("Először válassz ki egy feladatot!");
+                RefreshForm();
             }        
         }
         private void deleteBtn_No_Click(object sender, EventArgs e)
         {
             
+        }
+
+        #endregion
+
+        private void addCDButton_Click(object sender, EventArgs e)
+        {
+            statusPanel.Controls.Add(GenerateInsertPanel(true));
         }
     }
 }

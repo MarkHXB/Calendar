@@ -49,6 +49,9 @@ namespace CalendarUI.Forms
             this.insertLbl = new System.Windows.Forms.Label();
             this.deleteLbl = new System.Windows.Forms.Label();
             this.editLbl = new System.Windows.Forms.Label();
+            this.addCurrentDayPanel = new System.Windows.Forms.Panel();
+            this.addCDTitle = new System.Windows.Forms.Label();
+            this.addCDButton = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.showPnTaskPn.SuspendLayout();
             this.showPnSuccededPn.SuspendLayout();
@@ -57,6 +60,7 @@ namespace CalendarUI.Forms
             this.showPnTitlePn.SuspendLayout();
             this.statusPanel.SuspendLayout();
             this.editPnTitlePn.SuspendLayout();
+            this.addCurrentDayPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -74,6 +78,7 @@ namespace CalendarUI.Forms
             // 
             this.showPnTaskPn.AutoScroll = true;
             this.showPnTaskPn.BackColor = System.Drawing.Color.White;
+            this.showPnTaskPn.Controls.Add(this.addCurrentDayPanel);
             this.showPnTaskPn.Controls.Add(this.label5);
             this.showPnTaskPn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.showPnTaskPn.Location = new System.Drawing.Point(0, 86);
@@ -263,6 +268,41 @@ namespace CalendarUI.Forms
             this.editLbl.Text = "Módosítás";
             this.editLbl.Click += new System.EventHandler(this.statusBtn_Click);
             // 
+            // addCurrentDayPanel
+            // 
+            this.addCurrentDayPanel.Controls.Add(this.addCDTitle);
+            this.addCurrentDayPanel.Controls.Add(this.addCDButton);
+            this.addCurrentDayPanel.Enabled = false;
+            this.addCurrentDayPanel.Location = new System.Drawing.Point(102, 293);
+            this.addCurrentDayPanel.Name = "addCurrentDayPanel";
+            this.addCurrentDayPanel.Size = new System.Drawing.Size(265, 104);
+            this.addCurrentDayPanel.TabIndex = 7;
+            this.addCurrentDayPanel.Visible = false;
+            // 
+            // addCDTitle
+            // 
+            this.addCDTitle.AutoSize = true;
+            this.addCDTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.addCDTitle.Location = new System.Drawing.Point(72, 12);
+            this.addCDTitle.Name = "addCDTitle";
+            this.addCDTitle.Size = new System.Drawing.Size(105, 30);
+            this.addCDTitle.TabIndex = 1;
+            this.addCDTitle.Text = "Új feladat";
+            // 
+            // addCDButton
+            // 
+            this.addCDButton.BackColor = System.Drawing.Color.Transparent;
+            this.addCDButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("addCDButton.BackgroundImage")));
+            this.addCDButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.addCDButton.FlatAppearance.BorderSize = 0;
+            this.addCDButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addCDButton.Location = new System.Drawing.Point(77, 54);
+            this.addCDButton.Name = "addCDButton";
+            this.addCDButton.Size = new System.Drawing.Size(98, 44);
+            this.addCDButton.TabIndex = 0;
+            this.addCDButton.UseVisualStyleBackColor = false;
+            this.addCDButton.Click += new System.EventHandler(this.addCDButton_Click);
+            // 
             // EditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -285,6 +325,8 @@ namespace CalendarUI.Forms
             this.statusPanel.ResumeLayout(false);
             this.editPnTitlePn.ResumeLayout(false);
             this.editPnTitlePn.PerformLayout();
+            this.addCurrentDayPanel.ResumeLayout(false);
+            this.addCurrentDayPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -309,5 +351,8 @@ namespace CalendarUI.Forms
         private System.Windows.Forms.Panel showPnTaskPn;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button backBtn;
+        private System.Windows.Forms.Panel addCurrentDayPanel;
+        private System.Windows.Forms.Label addCDTitle;
+        private System.Windows.Forms.Button addCDButton;
     }
 }

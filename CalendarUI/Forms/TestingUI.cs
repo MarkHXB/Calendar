@@ -37,9 +37,14 @@ namespace Forms.Form1
             InitializeComponent();
             form = this;
         }
-        public static void Refresh()
+        public void RefreshForm()
         {
             TaskModel.RefreshLocalDB();
+
+            this.Hide();
+
+            Form1 form = new Form1();
+
             form.Show();
         }
         private void LoadCalendar_OnLoad()
