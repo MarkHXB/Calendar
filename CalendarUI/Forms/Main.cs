@@ -785,7 +785,11 @@ namespace Forms.Main
                  restoreData = false;
              }
          }
-        
+
+        private void comboBox1_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
     }
 
 

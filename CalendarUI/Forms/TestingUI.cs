@@ -27,12 +27,20 @@ namespace Forms.Form1
         public static int MonthNumber = 1;
         public static int SelectedMonthNumber = 1;
 
+        public static Form form = null;
+
         #endregion
 
 
         public Form1()
         {
             InitializeComponent();
+            form = this;
+        }
+        public static void Refresh()
+        {
+            TaskModel.RefreshLocalDB();
+            form.Show();
         }
         private void LoadCalendar_OnLoad()
         {
@@ -493,7 +501,6 @@ namespace Forms.Form1
 
             try
             {
-                MessageBox.Show(TaskModel.Selected_Tasks[1].Content);
                 EditForm form = new EditForm();
                 form.Show();
 
