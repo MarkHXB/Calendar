@@ -87,11 +87,11 @@ namespace CalendarUI.Forms
         {
             if(task.Level == 1)
             {
-                return Color.FromArgb(70,Color.Green);
+                return Color.FromArgb(70,Color.Blue);
             }
             else if (task.Level == 2)
             {
-                return Color.FromArgb(70, Color.Blue);
+                return Color.FromArgb(70, Color.Green);
             }
             else
             {
@@ -814,7 +814,7 @@ namespace CalendarUI.Forms
                 ComboBox cbMonth = new ComboBox()
                 {
                     Name = "insertDateMonth",
-                    Text = DateTime.Now.Month.ToString(),
+                    Text = MainFormModel.Month.ToString(),
                     Font = new Font(new FontFamily(this.Font.Name), 14f),
                     Size = new Size(63, 32),
                     Location = new Point(194, 95)
@@ -833,7 +833,7 @@ namespace CalendarUI.Forms
                 ComboBox cbDay = new ComboBox()
                 {
                     Name = "insertDateDay",
-                    Text = Form1.SelectedMonthNumber.ToString(),
+                    Text = MainFormModel.Day.ToString(),
                     Font = new Font(new FontFamily(this.Font.Name), 14f),
                     Size = new Size(63, 32),
                     Location = new Point(194, 133)

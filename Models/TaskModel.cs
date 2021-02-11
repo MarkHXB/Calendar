@@ -581,8 +581,6 @@ namespace Calendar.Models
                     }
                 }
             }
-
-
             return selectedTask;
         }
 

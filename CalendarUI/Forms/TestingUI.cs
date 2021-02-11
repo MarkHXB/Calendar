@@ -35,6 +35,8 @@ namespace Forms.Form1
 
         private static bool RefreshIsNeeded = false;
 
+        private int FlowedDays = 0;
+
         #endregion
 
 
@@ -57,6 +59,8 @@ namespace Forms.Form1
         
         private void LoadCalendar_OnLoad()
         {
+            
+
             SetTableConfig();
 
             //1.: Set month days
@@ -78,6 +82,8 @@ namespace Forms.Form1
         {
             //SET CURRENT Month nUmber
             int monthDaysCount = CurrentMonthDayCount(Month);
+
+            Console.WriteLine(monthDaysCount);
 
             //FEBRUARY
             if (monthDaysCount < 28)
@@ -116,6 +122,8 @@ namespace Forms.Form1
         private void GenerateCalendarTemplate()
         {
             #region PANELS
+            
+
 
             int rows = Table.RowCount;
             int columns = Table.ColumnCount;
@@ -205,17 +213,17 @@ namespace Forms.Form1
                     else if(j>1)
                     {
                         //Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                      
                         Panel panel = new Panel()
                         {
                             Name = "dayPanel" + day.ToString(),
                             BackColor = Color.White,
-                            Dock = DockStyle.Fill,
-                            BorderStyle=BorderStyle.Fixed3D
+                            Dock = DockStyle.Fill,                       
                         };    
 
                         Label dayNumber = new Label()
                         {
-                            Text = day.ToString(),
+                            Text = GetDay(day,panel),
                             Anchor = (AnchorStyles.Left | AnchorStyles.Top),
                             Name = "dayNumber" + day.ToString()
                         };
@@ -240,29 +248,68 @@ namespace Forms.Form1
 
             #endregion
         }
+        private string GetDay(int index,Panel head)
+        {
+            string output = "";
+
+            if (index > CurrentMonthDayCount(MainFormModel.Month))
+            {
+                FlowedDays++;
+                output = FlowedDays.ToString();
+                if(head!=null)
+                    head.BackColor = Color.LightGray;
+                return output;
+            }
+            else
+            {
+                output = index.ToString();
+                return output;
+            }
+        }
+        private void Table_Paint(object sender, TableLayoutCellPaintEventArgs e)
+        {
+            int rows= Table.RowCount;
+            int columns = Table.ColumnCount;
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (i > 1)
+                    {
+                        if (e.Column == j && e.Row == i)
+                        {
+                            e.Graphics.DrawRectangle(new Pen(Color.FromArgb(50, 175, 176, 179)), e.CellBounds);
+                        }
+                    }
+                }
+            }
+            
+        }
 
         private void monthChooserPanel_Paint(object sender, PaintEventArgs e)
         {
             Panel panel = (Panel)sender;
 
+            /*
             ControlPaint.DrawBorder(e.Graphics, panel.ClientRectangle,
-               Color.Blue, 2, ButtonBorderStyle.Solid, // left
-               Color.Blue, 2, ButtonBorderStyle.Solid, // top
-               Color.Blue, 2, ButtonBorderStyle.Solid, // right
-               Color.Blue, 2, ButtonBorderStyle.Solid);// bottom        
+               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // left
+               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // top
+               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // right
+               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid);// bottom   
+            
+            */
         }
 
         private void dayPanel_Paint(object sender,PaintEventArgs e)
         {
             Panel panel = (Panel)sender;
-
+            
             ControlPaint.DrawBorder(e.Graphics, panel.ClientRectangle,
-               Color.Blue, 2, ButtonBorderStyle.Solid, // left
-               Color.Blue, 2, ButtonBorderStyle.Solid, // top
-               Color.Blue, 2, ButtonBorderStyle.Solid, // right
-               Color.Blue, 2, ButtonBorderStyle.Solid);// bottom
-
-            if (RefreshIsNeeded) { panel.Invalidate(); }
+              Color.FromArgb(90, 162, 171, 165), 1, ButtonBorderStyle.Solid, // left
+              Color.FromArgb(90, 162, 171, 165), 1, ButtonBorderStyle.Solid, // top
+              Color.FromArgb(90, 162, 171, 165), 1, ButtonBorderStyle.Solid, // right
+              Color.FromArgb(90, 162, 171, 165), 1, ButtonBorderStyle.Solid);// bottom
         }
 
         private void SizeModified()
@@ -275,17 +322,19 @@ namespace Forms.Form1
             {
                 Table.ColumnStyles.Add(new ColumnStyle() { Width = 1, SizeType = SizeType.Percent });
                 Table.ColumnStyles[i].Width = (float)Table.Width / columns;
+                Table.Controls[i].Invalidate();
 
                 for (int j = 0; j < rows; j++)
                 {
                     Table.RowStyles.Add(new RowStyle() { Height = 1, SizeType = SizeType.Percent });
                     Table.RowStyles[j].Height = (float)Table.Height / rows - 1;
+                    Table.Controls[j].Invalidate();
                 }
             }
         }
 
         private void LoadUserData_OnLoad()
-        {
+        {    
             //VALUES
             List<int> daysNumber = new List<int>();
 
@@ -297,7 +346,7 @@ namespace Forms.Form1
             daysNumber =CollectDaysNumber();
 
             //3.: Seeking unfinished Tasks in DB
-            Dictionary<DataModel.Task, int> unFinishedTasks = CollectUnfinishedTasks(daysNumber,MonthNumber);
+            Dictionary<DataModel.Task, int> unFinishedTasks = CollectUnfinishedTasks(daysNumber,MainFormModel.Month);
 
             //4.: Fill the root panels( day panels ) with subpanels ( flags )
             DrawTasksPanel(unFinishedTasks, daysNumber);
@@ -340,9 +389,9 @@ namespace Forms.Form1
                         && TaskModel.Date_Table[j].Month_ID == monthNumber)
                     {
                         taskNumber++;
-
+                        Console.WriteLine(taskNumber);
                         unFinishedTasks.Add(TaskModel.SelectTaskByDayNumber_Row(taskNumber,
-                            daysNumber[i], CurrentMonthNumber,true),daysNumber[i]);
+                            daysNumber[i], MainFormModel.Month,true),daysNumber[i]);
                     }
                 }
             }
@@ -357,15 +406,14 @@ namespace Forms.Form1
                 int taskPerDay = 0;
                 foreach (KeyValuePair<DataModel.Task,int> item in unFinishedTasks)
                 {
-                    
                     //day equals to the dayPanel ID( name )
                     if(item.Value == daysNumber[i])
                     {
-
                         taskPerDay++;
+
+                        Console.WriteLine(taskPerDay);
                         if (taskPerDay > 1)
                         {
-                            
                             Panel flagPanel = dayPanels[i].Controls.OfType<Panel>().ToList().Where(x => x.Name.Contains("flagPanel")).First();
                             //dayPanels[i].Controls.Add(PushFlagToPanel(item.Key.Level,flagPanel));
                             PushFlagToPanel(item.Key.Level,flagPanel,taskPerDay);
@@ -390,7 +438,7 @@ namespace Forms.Form1
             {
                 Name = "titlePanel" + dayNumber.ToString(),
                 Dock = DockStyle.Top,
-                BackColor=Color.Black
+                BackColor=Color.Transparent
             };
             titlePanel.Size = new Size(titlePanel.Width, 33);
 
@@ -399,7 +447,7 @@ namespace Forms.Form1
             {
                 Name = "flagPanel" + dayNumber.ToString(),
                 Dock = DockStyle.Top,
-                BackColor=Color.White
+                BackColor=Color.Transparent
             };
             flagPanel.Size = new Size(flagPanel.Width, 37);
 
@@ -428,15 +476,16 @@ namespace Forms.Form1
             {
                 PictureBox flag = new PictureBox()
                 {
-                    Size = new Size(35, 25),
+                    Size = new Size(45, 35),
                     SizeMode = PictureBoxSizeMode.Zoom,
                     Image = GetNeededFlag_Image(Level),
-                    Name = "flag" + "_" + InputModel.Int(Head.Name)
+                    Name = "flag" + "_" + InputModel.Int(Head.Name),
+                    Anchor=AnchorStyles.Left,
                 };
                 flag.Location = GetNeededFlag_Position(flag.Size.Width, CountTask);
 
                 flag.Click += SelectedFlag_Click;
-
+                
                 Head.Controls.Add(flag);
             }
         }
@@ -469,7 +518,7 @@ namespace Forms.Form1
 
             if (CountTask == 1)
             {
-                loc = new Point(3, 6);
+                loc = new Point(4, 6);
             }
             else if(CountTask==2)
             {
@@ -526,6 +575,7 @@ namespace Forms.Form1
         private void Form1_Resize(object sender, EventArgs e)
         {
             SizeModified();
+            form.Update();
         }
 
         #endregion
@@ -541,7 +591,10 @@ namespace Forms.Form1
             Panel rootPanel = (Panel)sender;
             int selectDayNumber = InputModel.Int(rootPanel.Name);
 
-            SelectedMonthNumber = selectDayNumber;
+            string result=GetDay(selectDayNumber, null);
+            int day = int.Parse(result);
+
+            SelectedMonthNumber = day;
             MainFormModel.Day = SelectedMonthNumber;
 
             TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(selectDayNumber,MonthNumber, true);
@@ -559,7 +612,6 @@ namespace Forms.Form1
             }
             
         }
-
         private void SelectedFlag_Click(object sender, EventArgs e)
         {
             PictureBox root = (PictureBox)sender;
@@ -594,6 +646,8 @@ namespace Forms.Form1
             Table.Dock = DockStyle.Fill;
 
             this.Controls.Add(Table);
+
+            FlowedDays = 0;
         }
         private void RefreshTable()
         {

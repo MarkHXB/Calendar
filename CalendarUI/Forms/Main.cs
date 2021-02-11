@@ -28,8 +28,7 @@ namespace Forms.Main
          {
              CollectCurrentDayTasks_OnLoad();
          }
-
-         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
          {
              Application.Exit();
          }
