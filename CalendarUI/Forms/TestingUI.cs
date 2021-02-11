@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Calendar.Models;
 using CalendarUI.Forms;
+using CalendarLibrary.Models;
 
 namespace Forms.Form1
 {
@@ -24,10 +25,15 @@ namespace Forms.Form1
 
         #region ForEditForm
 
-        public static int MonthNumber = 1;
+        public static int CurrentYear = MainFormModel.Year;
+        public static int MonthNumber = MainFormModel.Month;
         public static int SelectedMonthNumber = 1;
 
         public static Form form = null;
+
+        public TableLayoutPanel Table = null;
+
+        private static bool RefreshIsNeeded = false;
 
         #endregion
 
@@ -36,6 +42,7 @@ namespace Forms.Form1
         {
             InitializeComponent();
             form = this;
+            Table = new TableLayoutPanel();
         }
         public void RefreshForm()
         {
@@ -47,10 +54,13 @@ namespace Forms.Form1
 
             form.Show();
         }
+        
         private void LoadCalendar_OnLoad()
         {
+            SetTableConfig();
+
             //1.: Set month days
-            CalcutaMonthDays(DateTime.Now.Month);
+            CalcutaMonthDays(MonthNumber);
 
             //2.: Generate Calendar
             GenerateCalendarTemplate();
@@ -67,45 +77,39 @@ namespace Forms.Form1
         private void CalcutaMonthDays(int Month)
         {
             //SET CURRENT Month nUmber
-            CurrentMonthNumber = (int)DateTime.Now.Month;
-
             int monthDaysCount = CurrentMonthDayCount(Month);
-            int counter = 0;
-
-            foreach (var item in dayPanels)
-            {
-                //Label title = item.Controls.OfType<Label>().ToList().Where(x => x.Name.Contains("dayTitle")).First();
-
-                //counter++;                
-            }
-
-            Console.WriteLine(monthDaysCount);
 
             //FEBRUARY
-            if(monthDaysCount == 28)
+            if (monthDaysCount < 28)
             {
                 //2 row is for menu
                 //others are for days
-                tableLayoutPanel1.RowCount = 2 + 4;
+                Table.RowCount = 2 + 3;
+            }
+            else if (monthDaysCount == 28)
+            {
+                //2 row is for menu
+                //others are for days
+                Table.RowCount = 2 + 4;
             }
             else if(monthDaysCount == 29)
             {
                 //2 row is for menu
                 //others are for days
-                tableLayoutPanel1.RowCount = 2 + 5;
+                Table.RowCount = 2 + 5;
             }
             //OTHERS
             else if (monthDaysCount == 30)
             {
                 //2 row is for menu
                 //others are for days
-                tableLayoutPanel1.RowCount = 2 + 5;
+                Table.RowCount = 2 + 5;
             }
             else if (monthDaysCount == 31)
             {
                 //2 row is for menu
                 //others are for days
-                tableLayoutPanel1.RowCount = 2 + 5;
+                Table.RowCount = 2 + 5;
             }
         }
 
@@ -113,8 +117,8 @@ namespace Forms.Form1
         {
             #region PANELS
 
-            int rows = tableLayoutPanel1.RowCount;
-            int columns = tableLayoutPanel1.ColumnCount;
+            int rows = Table.RowCount;
+            int columns = Table.ColumnCount;
             int day = 1;
 
             string[] days =
@@ -122,6 +126,7 @@ namespace Forms.Form1
                 "Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat","Vasárnap"
             };
 
+            //TABLE
             for (int j = 0; j < rows; j++)
             {
                 for (int i = 0; i < columns; i++)
@@ -136,7 +141,7 @@ namespace Forms.Form1
                             Text = days[i],
                             Name = "daysTitle" + i.ToString()
                         };
-                        tableLayoutPanel1.Controls.Add(title, i, j);
+                        Table.Controls.Add(title, i, j);
                     }
 
                     //STRIP MENU
@@ -144,80 +149,84 @@ namespace Forms.Form1
                     {
                         Panel head = new Panel()
                         {
-                            BackColor = Color.Beige,
-                            Anchor = AnchorStyles.None,
+                            Dock=DockStyle.Fill,
+                            BackColor=Color.White
                         };
+                        head.Paint += monthChooserPanel_Paint;
 
-                        Button prevBtn = new Button()
+                        Button prevMonthBtn = new Button()
                         {
-                            Name = "prevMonthBtn",
-                            Anchor = AnchorStyles.Left,
-                            TextAlign= ContentAlignment.MiddleLeft,
                             BackgroundImage = Image.FromFile(@"C:\Users\bakon\OneDrive\Asztali gép\Infó\C#\Calendar\Assets\prevBtn.png"),
-                            BackgroundImageLayout=ImageLayout.Zoom,
-                            Size=new Size(31,25),
-                            BackColor = Color.Transparent
+                            BackgroundImageLayout = ImageLayout.Zoom,
+                            Name = "prevMonthBtn",
+                            Text = "",
+                            BackColor = Color.Transparent,
+                            FlatStyle = FlatStyle.Flat,
+                            Anchor = AnchorStyles.Left,
+                            Width = 30
                         };
-                        
-                        Label month = new Label()
-                        {
-                            Anchor = AnchorStyles.None,
-                            Text = CurrentMonthName(),
-                            Name = "currentMonthTitle"
-                        };
+                        prevMonthBtn.FlatAppearance.BorderSize = 0;
+                        prevMonthBtn.Location = new Point(0, head.Height / 2);
+                        prevMonthBtn.Click += prevMonthBtn_Click_1;
 
-                        Button nextBtn = new Button()
+                        Button nextMonthBtn = new Button()
                         {
-                            Name="nextMonthBtn",
-                            Anchor = AnchorStyles.None,
-                            TextAlign = ContentAlignment.MiddleRight,
                             BackgroundImage = Image.FromFile(@"C:\Users\bakon\OneDrive\Asztali gép\Infó\C#\Calendar\Assets\nextBtn.png"),
                             BackgroundImageLayout = ImageLayout.Zoom,
-                            Size = new Size(31, 25),
-                            BackColor=Color.Transparent
+                            Name = "nextMonthBtn",
+                            Text = "",
+                            BackColor = Color.Transparent,
+                            FlatStyle = FlatStyle.Flat,
+                            Anchor = AnchorStyles.Right,
+                            Width = 30
                         };
+                        nextMonthBtn.FlatAppearance.BorderSize = 0;
+                        nextMonthBtn.Location = new Point(head.Width-nextMonthBtn.Width, head.Height / 2);
+                        nextMonthBtn.Click += nextMonthBtn_Click_1;
 
-                        //Events
-                        prevBtn.Click += prevMonth_Click;
-                        nextBtn.Click += nextMonth_Click;
+                        head.Controls.Add(prevMonthBtn);
+                        head.Controls.Add(nextMonthBtn);
 
-                        //Locations
-                        prevBtn.Location = new Point(prevBtn.Location.X,(head.Height/2)-prevBtn.Height/2);
-                        
-                        month.Location = new Point((head.Width/2)- month.Size.Width/4, (head.Height/2)- month.Size.Height/2);
+                        Label currentMonthTitle = new Label()
+                        {
+                            Name="currentMonthTitle",
+                            Text=CurrentMonthName(MonthNumber),
+                            Anchor=AnchorStyles.None,
+                            TextAlign=ContentAlignment.MiddleCenter,
+                        };
+                        currentMonthTitle.Location = new Point(head.Width / 2 - currentMonthTitle.Width / 2, head.Height / 2);
 
-                       // nextBtn.Location = new Point(nextBtn.Location.X, (head.Height / 2) - nextBtn.Height / 2);
+                        head.Controls.Add(currentMonthTitle);
 
-                        //Controls
-                        head.Controls.Add(prevBtn);
-                        head.Controls.Add(nextBtn);
-                        head.Controls.Add(month);
-                        tableLayoutPanel1.Controls.Add(head, i, j);
+                        Table.Controls.Add(head, i, j);   
                     }
+
+                    //Task panels
                     else if(j>1)
                     {
-                        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                        //Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
                         Panel panel = new Panel()
                         {
                             Name = "dayPanel" + day.ToString(),
-                            BackColor = randomColor,
-                            Dock = DockStyle.Fill
-                        };
+                            BackColor = Color.White,
+                            Dock = DockStyle.Fill,
+                            BorderStyle=BorderStyle.Fixed3D
+                        };    
+
                         Label dayNumber = new Label()
                         {
                             Text = day.ToString(),
-                            Anchor = AnchorStyles.Left,
-                            TextAlign = ContentAlignment.TopLeft,
+                            Anchor = (AnchorStyles.Left | AnchorStyles.Top),
                             Name = "dayNumber" + day.ToString()
                         };
+                        dayNumber.Location = new Point(3,3);
 
-                        //this needed for anchor left corner EZZEL MÉG VALAMIT KEZDENI KELL
-                        //dayNumber.Location = new Point();
                         panel.Controls.Add(dayNumber);
 
                         panel.Click += dayPanel_Click;
+                        panel.Paint += dayPanel_Paint;
 
-                        tableLayoutPanel1.Controls.Add(panel, i, j);
+                        Table.Controls.Add(panel, i, j);
 
                         day++;
 
@@ -226,35 +235,53 @@ namespace Forms.Form1
                 }
             }
 
+            //STRIP MENU ~ 1 ~ Year,Month chooser
+            SetMonthChooserConfig();
+
             #endregion
         }
 
-       
+        private void monthChooserPanel_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = (Panel)sender;
+
+            ControlPaint.DrawBorder(e.Graphics, panel.ClientRectangle,
+               Color.Blue, 2, ButtonBorderStyle.Solid, // left
+               Color.Blue, 2, ButtonBorderStyle.Solid, // top
+               Color.Blue, 2, ButtonBorderStyle.Solid, // right
+               Color.Blue, 2, ButtonBorderStyle.Solid);// bottom        
+        }
+
+        private void dayPanel_Paint(object sender,PaintEventArgs e)
+        {
+            Panel panel = (Panel)sender;
+
+            ControlPaint.DrawBorder(e.Graphics, panel.ClientRectangle,
+               Color.Blue, 2, ButtonBorderStyle.Solid, // left
+               Color.Blue, 2, ButtonBorderStyle.Solid, // top
+               Color.Blue, 2, ButtonBorderStyle.Solid, // right
+               Color.Blue, 2, ButtonBorderStyle.Solid);// bottom
+
+            if (RefreshIsNeeded) { panel.Invalidate(); }
+        }
+
         private void SizeModified()
         {
-            int rows = tableLayoutPanel1.RowCount;
-            int columns = tableLayoutPanel1.ColumnCount;
-
+            int rows = Table.RowCount;
+            int columns = Table.ColumnCount;
 
             //TABLELAYOUTPANEL
             for (int i = 0; i < columns; i++)
             {
-                tableLayoutPanel1.ColumnStyles[i].Width = (float)tableLayoutPanel1.Width / columns;
+                Table.ColumnStyles.Add(new ColumnStyle() { Width = 1, SizeType = SizeType.Percent });
+                Table.ColumnStyles[i].Width = (float)Table.Width / columns;
 
                 for (int j = 0; j < rows; j++)
                 {
-                    tableLayoutPanel1.RowStyles[j].Height = (float)tableLayoutPanel1.Height / rows - 1;
+                    Table.RowStyles.Add(new RowStyle() { Height = 1, SizeType = SizeType.Percent });
+                    Table.RowStyles[j].Height = (float)Table.Height / rows - 1;
                 }
             }
-
-            //DAYPANELS      
-            /*foreach (var item in dayPanels)
-            {
-                Label dayNumber = item.Controls.OfType<Label>().ToList().Where(x => x.Name.Contains("dayNumber")).First();
-
-                dayNumber.Location = new Point(dayNumber.Location.X, dayNumber.Location.Y);
-            }
-            */
         }
 
         private void LoadUserData_OnLoad()
@@ -270,7 +297,7 @@ namespace Forms.Form1
             daysNumber =CollectDaysNumber();
 
             //3.: Seeking unfinished Tasks in DB
-            Dictionary<DataModel.Task, int> unFinishedTasks = CollectUnfinishedTasks(daysNumber,CurrentMonthNumber);
+            Dictionary<DataModel.Task, int> unFinishedTasks = CollectUnfinishedTasks(daysNumber,MonthNumber);
 
             //4.: Fill the root panels( day panels ) with subpanels ( flags )
             DrawTasksPanel(unFinishedTasks, daysNumber);
@@ -281,6 +308,11 @@ namespace Forms.Form1
 
 
         #region LoadUserData_OnLoad SUB functions
+        private void SetMonthChooserConfig()
+        {
+            //currentYearTitle.Text = CurrentYear.ToString();
+            //currentMonthTitle.Text = CurrentMonthName(MonthNumber);
+        }
 
         private List<int> CollectDaysNumber()
         {
@@ -470,6 +502,16 @@ namespace Forms.Form1
 
             return output;
         }
+        private string CurrentMonthName(int Month)
+        {
+            string output = "";
+
+            DateTime date = new DateTime(DateTime.Now.Year, Month, DateTime.Now.Day);
+
+            output = date.ToString("MMMM");
+
+            return output;
+        }
 
         #endregion
 
@@ -499,10 +541,10 @@ namespace Forms.Form1
             Panel rootPanel = (Panel)sender;
             int selectDayNumber = InputModel.Int(rootPanel.Name);
 
-            MonthNumber = DateTime.Now.Month;
             SelectedMonthNumber = selectDayNumber;
+            MainFormModel.Day = SelectedMonthNumber;
 
-            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(selectDayNumber,CurrentMonthNumber, true);
+            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(selectDayNumber,MonthNumber, true);
 
             try
             {
@@ -534,11 +576,67 @@ namespace Forms.Form1
             
         }
 
-        private void prevMonth_Click(object sender, EventArgs e)
-        {
-        }
+
         #endregion
 
         #endregion
+
+        #region Refresh the Table
+
+        private void SetTableConfig()
+        {
+            if(this.Controls.Contains(Table))
+                this.Controls.Remove(Table);
+
+            Table = new TableLayoutPanel();
+            Table.Name = "tableLayoutPanel1";
+            Table.ColumnCount = 7;
+            Table.Dock = DockStyle.Fill;
+
+            this.Controls.Add(Table);
+        }
+        private void RefreshTable()
+        {
+            SetTableConfig();
+
+            CalcutaMonthDays(MonthNumber);
+
+            //2.: Generate Calendar
+            GenerateCalendarTemplate();
+
+            //3.: Position that
+            SizeModified();
+
+            //4.: Load the data
+            LoadUserData_OnLoad();
+        }
+
+        #endregion
+
+        private void prevMonthBtn_Click_1(object sender, EventArgs e)
+        {
+            MonthNumber -= 1;
+            MainFormModel.Month -= 1;
+            if (MonthNumber == 0)
+            {
+                CurrentYear--;
+                MonthNumber = 12;
+                MainFormModel.Month = 12;
+            }
+            RefreshTable();
+        }
+
+        private void nextMonthBtn_Click_1(object sender, EventArgs e)
+        {
+            MonthNumber += 1;
+            MainFormModel.Month += 1;
+            if (MonthNumber == 13)
+            {
+                CurrentYear++;
+                MonthNumber = 1;
+                MainFormModel.Month = 1;
+            }
+            RefreshTable();
+        }
     }
 }

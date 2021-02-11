@@ -1,4 +1,5 @@
 ﻿using Calendar.Models;
+using CalendarLibrary.Models;
 using Forms.Form1;
 using System;
 using System.Collections.Generic;
@@ -66,12 +67,12 @@ namespace CalendarUI.Forms
 
         private void SetLabelContents()
         {
-            unsuccededLabel.Text = TaskModel.GetCurrentDayTaskNumber_Not_Completed(sMonthNumber, sDayNumber).ToString();
-            succededLabel.Text = TaskModel.GetCurrentDayTaskNumber_Completed(sMonthNumber, sDayNumber).ToString();
+            unsuccededLabel.Text = TaskModel.GetCurrentDayTaskNumber_Not_Completed(MainFormModel.Month, MainFormModel.Day).ToString();
+            succededLabel.Text = TaskModel.GetCurrentDayTaskNumber_Completed(MainFormModel.Month, MainFormModel.Day).ToString();
 
-            string finalTxt = Form1.MonthNumber < 10 ? "0" + Form1.MonthNumber.ToString() : Form1.MonthNumber.ToString();
-            monthLabel.Text = finalTxt + "." + Form1.SelectedMonthNumber;
-            dayLabel.Text = InputModel.GetMonthDayName(Form1.MonthNumber, Form1.SelectedMonthNumber);
+            string finalTxt = MainFormModel.Month < 10 ? "0" + MainFormModel.Month.ToString() : MainFormModel.Month.ToString();
+            monthLabel.Text = finalTxt + "." + MainFormModel.Day;
+            dayLabel.Text = InputModel.GetMonthDayName(MainFormModel.Month, MainFormModel.Day);
         }
 
         private void SetBasiclblContents()
