@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2DA1462F-FC64-49E1-9BB1-9EBFA0151A66}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>CalendarUI</RootNamespace>
     <AssemblyName>CalendarUI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -35,6 +35,9 @@
   <PropertyGroup>
     <StartupObject>CalendarUI.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>main_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\AddTaskManually.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddTaskManually.Designer.cs">
+      <DependentUpon>AddTaskManually.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Calendar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +84,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\AddTaskManually.resx">
+      <DependentUpon>AddTaskManually.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Calendar.resx">
       <DependentUpon>Calendar.cs</DependentUpon>
     </EmbeddedResource>
@@ -114,6 +126,9 @@
       <Project>{3137a365-a671-4190-a5e1-fc0502fbadc5}</Project>
       <Name>CalendarLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="main_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

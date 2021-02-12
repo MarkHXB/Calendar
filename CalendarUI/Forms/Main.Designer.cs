@@ -55,17 +55,23 @@ namespace Forms.Main
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
             this.menuPanel_1.SuspendLayout();
             this.menuPanel_2.SuspendLayout();
             this.mainPanel.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuPanel_1
             // 
             this.menuPanel_1.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.menuPanel_1.Controls.Add(this.panel4);
             this.menuPanel_1.Controls.Add(this.btnBackForm);
             this.menuPanel_1.Dock = System.Windows.Forms.DockStyle.Left;
             this.menuPanel_1.Location = new System.Drawing.Point(0, 0);
@@ -365,6 +371,33 @@ namespace Forms.Main
             this.label3.TabIndex = 0;
             this.label3.Text = "Biztosan törölni szeretnéd?";
             // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.panel5);
+            this.panel4.Location = new System.Drawing.Point(38, 307);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(265, 104);
+            this.panel4.TabIndex = 7;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label6.Location = new System.Drawing.Point(27, 7);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(212, 24);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Új feladat hozzáadása";
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.label6);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel5.Location = new System.Drawing.Point(0, 0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(265, 36);
+            this.panel5.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -392,6 +425,9 @@ namespace Forms.Main
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -422,5 +458,8 @@ namespace Forms.Main
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Label label6;
     }
 }

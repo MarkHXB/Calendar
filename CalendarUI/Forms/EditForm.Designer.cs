@@ -32,6 +32,9 @@ namespace CalendarUI.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditForm));
             this.panel2 = new System.Windows.Forms.Panel();
             this.showPnTaskPn = new System.Windows.Forms.Panel();
+            this.addCurrentDayPanel = new System.Windows.Forms.Panel();
+            this.addCDTitle = new System.Windows.Forms.Label();
+            this.addCDButton = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.showPnSuccededPn = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -49,18 +52,15 @@ namespace CalendarUI.Forms
             this.insertLbl = new System.Windows.Forms.Label();
             this.deleteLbl = new System.Windows.Forms.Label();
             this.editLbl = new System.Windows.Forms.Label();
-            this.addCurrentDayPanel = new System.Windows.Forms.Panel();
-            this.addCDTitle = new System.Windows.Forms.Label();
-            this.addCDButton = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.showPnTaskPn.SuspendLayout();
+            this.addCurrentDayPanel.SuspendLayout();
             this.showPnSuccededPn.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.showPnTitlePn.SuspendLayout();
             this.statusPanel.SuspendLayout();
             this.editPnTitlePn.SuspendLayout();
-            this.addCurrentDayPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -71,7 +71,7 @@ namespace CalendarUI.Forms
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(504, 665);
+            this.panel2.Size = new System.Drawing.Size(547, 665);
             this.panel2.TabIndex = 1;
             // 
             // showPnTaskPn
@@ -83,8 +83,43 @@ namespace CalendarUI.Forms
             this.showPnTaskPn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.showPnTaskPn.Location = new System.Drawing.Point(0, 86);
             this.showPnTaskPn.Name = "showPnTaskPn";
-            this.showPnTaskPn.Size = new System.Drawing.Size(504, 579);
+            this.showPnTaskPn.Size = new System.Drawing.Size(547, 579);
             this.showPnTaskPn.TabIndex = 5;
+            // 
+            // addCurrentDayPanel
+            // 
+            this.addCurrentDayPanel.Controls.Add(this.addCDTitle);
+            this.addCurrentDayPanel.Controls.Add(this.addCDButton);
+            this.addCurrentDayPanel.Enabled = false;
+            this.addCurrentDayPanel.Location = new System.Drawing.Point(102, 293);
+            this.addCurrentDayPanel.Name = "addCurrentDayPanel";
+            this.addCurrentDayPanel.Size = new System.Drawing.Size(265, 104);
+            this.addCurrentDayPanel.TabIndex = 7;
+            this.addCurrentDayPanel.Visible = false;
+            // 
+            // addCDTitle
+            // 
+            this.addCDTitle.AutoSize = true;
+            this.addCDTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.addCDTitle.Location = new System.Drawing.Point(72, 12);
+            this.addCDTitle.Name = "addCDTitle";
+            this.addCDTitle.Size = new System.Drawing.Size(105, 30);
+            this.addCDTitle.TabIndex = 1;
+            this.addCDTitle.Text = "Új feladat";
+            // 
+            // addCDButton
+            // 
+            this.addCDButton.BackColor = System.Drawing.Color.Transparent;
+            this.addCDButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("addCDButton.BackgroundImage")));
+            this.addCDButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.addCDButton.FlatAppearance.BorderSize = 0;
+            this.addCDButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addCDButton.Location = new System.Drawing.Point(77, 54);
+            this.addCDButton.Name = "addCDButton";
+            this.addCDButton.Size = new System.Drawing.Size(98, 44);
+            this.addCDButton.TabIndex = 0;
+            this.addCDButton.UseVisualStyleBackColor = false;
+            this.addCDButton.Click += new System.EventHandler(this.addCDButton_Click);
             // 
             // label5
             // 
@@ -107,7 +142,7 @@ namespace CalendarUI.Forms
             this.showPnSuccededPn.Dock = System.Windows.Forms.DockStyle.Top;
             this.showPnSuccededPn.Location = new System.Drawing.Point(0, 65);
             this.showPnSuccededPn.Name = "showPnSuccededPn";
-            this.showPnSuccededPn.Size = new System.Drawing.Size(504, 21);
+            this.showPnSuccededPn.Size = new System.Drawing.Size(547, 21);
             this.showPnSuccededPn.TabIndex = 4;
             // 
             // pictureBox2
@@ -179,7 +214,7 @@ namespace CalendarUI.Forms
             this.showPnTitlePn.Dock = System.Windows.Forms.DockStyle.Top;
             this.showPnTitlePn.Location = new System.Drawing.Point(0, 0);
             this.showPnTitlePn.Name = "showPnTitlePn";
-            this.showPnTitlePn.Size = new System.Drawing.Size(504, 65);
+            this.showPnTitlePn.Size = new System.Drawing.Size(547, 65);
             this.showPnTitlePn.TabIndex = 0;
             // 
             // backBtn
@@ -218,9 +253,9 @@ namespace CalendarUI.Forms
             // 
             this.statusPanel.Controls.Add(this.editPnTitlePn);
             this.statusPanel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.statusPanel.Location = new System.Drawing.Point(504, 0);
+            this.statusPanel.Location = new System.Drawing.Point(547, 0);
             this.statusPanel.Name = "statusPanel";
-            this.statusPanel.Size = new System.Drawing.Size(384, 665);
+            this.statusPanel.Size = new System.Drawing.Size(373, 665);
             this.statusPanel.TabIndex = 2;
             // 
             // editPnTitlePn
@@ -232,7 +267,7 @@ namespace CalendarUI.Forms
             this.editPnTitlePn.Dock = System.Windows.Forms.DockStyle.Top;
             this.editPnTitlePn.Location = new System.Drawing.Point(0, 0);
             this.editPnTitlePn.Name = "editPnTitlePn";
-            this.editPnTitlePn.Size = new System.Drawing.Size(384, 66);
+            this.editPnTitlePn.Size = new System.Drawing.Size(373, 66);
             this.editPnTitlePn.TabIndex = 3;
             // 
             // insertLbl
@@ -268,54 +303,22 @@ namespace CalendarUI.Forms
             this.editLbl.Text = "Módosítás";
             this.editLbl.Click += new System.EventHandler(this.statusBtn_Click);
             // 
-            // addCurrentDayPanel
-            // 
-            this.addCurrentDayPanel.Controls.Add(this.addCDTitle);
-            this.addCurrentDayPanel.Controls.Add(this.addCDButton);
-            this.addCurrentDayPanel.Enabled = false;
-            this.addCurrentDayPanel.Location = new System.Drawing.Point(102, 293);
-            this.addCurrentDayPanel.Name = "addCurrentDayPanel";
-            this.addCurrentDayPanel.Size = new System.Drawing.Size(265, 104);
-            this.addCurrentDayPanel.TabIndex = 7;
-            this.addCurrentDayPanel.Visible = false;
-            // 
-            // addCDTitle
-            // 
-            this.addCDTitle.AutoSize = true;
-            this.addCDTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.addCDTitle.Location = new System.Drawing.Point(72, 12);
-            this.addCDTitle.Name = "addCDTitle";
-            this.addCDTitle.Size = new System.Drawing.Size(105, 30);
-            this.addCDTitle.TabIndex = 1;
-            this.addCDTitle.Text = "Új feladat";
-            // 
-            // addCDButton
-            // 
-            this.addCDButton.BackColor = System.Drawing.Color.Transparent;
-            this.addCDButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("addCDButton.BackgroundImage")));
-            this.addCDButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.addCDButton.FlatAppearance.BorderSize = 0;
-            this.addCDButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addCDButton.Location = new System.Drawing.Point(77, 54);
-            this.addCDButton.Name = "addCDButton";
-            this.addCDButton.Size = new System.Drawing.Size(98, 44);
-            this.addCDButton.TabIndex = 0;
-            this.addCDButton.UseVisualStyleBackColor = false;
-            this.addCDButton.Click += new System.EventHandler(this.addCDButton_Click);
-            // 
             // EditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(883, 665);
+            this.ClientSize = new System.Drawing.Size(918, 665);
             this.Controls.Add(this.statusPanel);
             this.Controls.Add(this.panel2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "EditForm";
-            this.Text = "InsertForm";
+            this.Text = "Calendar";
             this.Load += new System.EventHandler(this.InsertForm_Load);
             this.panel2.ResumeLayout(false);
             this.showPnTaskPn.ResumeLayout(false);
             this.showPnTaskPn.PerformLayout();
+            this.addCurrentDayPanel.ResumeLayout(false);
+            this.addCurrentDayPanel.PerformLayout();
             this.showPnSuccededPn.ResumeLayout(false);
             this.showPnSuccededPn.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -325,8 +328,6 @@ namespace CalendarUI.Forms
             this.statusPanel.ResumeLayout(false);
             this.editPnTitlePn.ResumeLayout(false);
             this.editPnTitlePn.PerformLayout();
-            this.addCurrentDayPanel.ResumeLayout(false);
-            this.addCurrentDayPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }

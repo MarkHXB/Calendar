@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Calendar.Models
 {
@@ -31,7 +32,6 @@ namespace Calendar.Models
         }
 
         #endregion
-
 
 
         #region SubClasses
@@ -106,6 +106,32 @@ namespace Calendar.Models
         #endregion
 
 
+        #region Functions
+
+        public static void MakeAlart(DataModel.Task UserTask)
+        {
+            DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            try
+            {
+                if (UserTask.Alarm_Date.Year == now.Year&&
+                    UserTask.Alarm_Date.Month==now.Month&&
+                    UserTask.Alarm_Date.Day==now.Day)
+                {
+                    AlarmUser();
+                }
+            }
+            catch(Exception x)
+            {
+
+            }
+        }
+
+        private static void AlarmUser()
+        {
+            
+        }
+
+        #endregion
 
         #region Properties
 

@@ -18,10 +18,8 @@ namespace Forms.Form1
     {
         Random rnd = new Random();
         public List<Panel> dayPanels = new List<Panel>();
-        public int MenuOptions = 1;
+        public int MenuOptions = 2;
         public int MenuOptionsRow = 1;
-
-        private int CurrentMonthNumber = 1;
 
         #region ForEditForm
 
@@ -32,8 +30,6 @@ namespace Forms.Form1
         public static Form form = null;
 
         public TableLayoutPanel Table = null;
-
-        private static bool RefreshIsNeeded = false;
 
         private int FlowedDays = 0;
 
@@ -46,20 +42,15 @@ namespace Forms.Form1
             form = this;
             Table = new TableLayoutPanel();
         }
-        public void RefreshForm()
+        public static void RefreshForm()
         {
             TaskModel.RefreshLocalDB();
 
-            this.Hide();
-
-            Form1 form = new Form1();
-
-            form.Show();
+            form.Refresh();
         }
         
         private void LoadCalendar_OnLoad()
         {
-            
 
             SetTableConfig();
 
@@ -80,10 +71,10 @@ namespace Forms.Form1
 
         private void CalcutaMonthDays(int Month)
         {
+            LogModel.MakeAlart(new DataModel.Task() { Alarm_Date = DateTime.Now });
+ 
             //SET CURRENT Month nUmber
             int monthDaysCount = CurrentMonthDayCount(Month);
-
-            Console.WriteLine(monthDaysCount);
 
             //FEBRUARY
             if (monthDaysCount < 28)
@@ -153,12 +144,12 @@ namespace Forms.Form1
                     }
 
                     //STRIP MENU
-                    else if (j == MenuOptionsRow && i== MenuOptions-1)
+                    else if (j == MenuOptionsRow && i == 0)
                     {
                         Panel head = new Panel()
                         {
-                            Dock=DockStyle.Fill,
-                            BackColor=Color.White
+                            Dock = DockStyle.Fill,
+                            BackColor = Color.White
                         };
                         head.Paint += monthChooserPanel_Paint;
 
@@ -189,7 +180,7 @@ namespace Forms.Form1
                             Width = 30
                         };
                         nextMonthBtn.FlatAppearance.BorderSize = 0;
-                        nextMonthBtn.Location = new Point(head.Width-nextMonthBtn.Width, head.Height / 2);
+                        nextMonthBtn.Location = new Point(head.Width - nextMonthBtn.Width, head.Height / 2);
                         nextMonthBtn.Click += nextMonthBtn_Click_1;
 
                         head.Controls.Add(prevMonthBtn);
@@ -197,37 +188,70 @@ namespace Forms.Form1
 
                         Label currentMonthTitle = new Label()
                         {
-                            Name="currentMonthTitle",
-                            Text=CurrentMonthName(MonthNumber),
-                            Anchor=AnchorStyles.None,
-                            TextAlign=ContentAlignment.MiddleCenter,
+                            Name = "currentMonthTitle",
+                            Text = CurrentMonthName(MonthNumber),
+                            Anchor = AnchorStyles.None,
+                            TextAlign = ContentAlignment.MiddleCenter,
                         };
                         currentMonthTitle.Location = new Point(head.Width / 2 - currentMonthTitle.Width / 2, head.Height / 2);
 
                         head.Controls.Add(currentMonthTitle);
 
-                        Table.Controls.Add(head, i, j);   
+                        Table.Controls.Add(head, i, j);
+                    }
+                    else if (j == MenuOptionsRow && i == 1)
+                    {
+                        Panel head = new Panel()
+                        {
+                            Dock = DockStyle.Fill,
+                            BackColor = Color.LightBlue,
+                            Name = "addNewTaskManually"
+                        };
+                        Panel insertPanel = new Panel()
+                        {
+                            Name="insertPanel",
+                            Dock=DockStyle.Top,
+                            Size=new Size(head.Width,36),
+                            BackColor=Color.White,
+                            BorderStyle=BorderStyle.FixedSingle
+                        };
+                        head.Controls.Add(insertPanel);
+
+                        Label insertTitle = new Label()
+                        {
+                            Name = "insertPanelTitle",
+                            Text = "Új feladat hozzáadása",
+                            Font = new Font(new FontFamily(this.Font.Name), 11f, FontStyle.Bold),
+                            Anchor = AnchorStyles.Top, 
+                            Cursor=Cursors.Hand
+                        };
+                        insertPanel.Controls.Add(insertTitle);
+                        insertTitle.Location = new Point(head.Width / 2 - insertTitle.Width / 2, 7);
+                        insertTitle.Click += AddNewTaskManuallyPanel_Click;
+
+
+                        Table.Controls.Add(head, i, j);
                     }
 
                     //Task panels
-                    else if(j>1)
+                    else if (j > 1)
                     {
                         //Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-                      
+
                         Panel panel = new Panel()
                         {
                             Name = "dayPanel" + day.ToString(),
                             BackColor = Color.White,
-                            Dock = DockStyle.Fill,                       
-                        };    
+                            Dock = DockStyle.Fill,
+                        };
 
                         Label dayNumber = new Label()
                         {
-                            Text = GetDay(day,panel),
+                            Text = GetDay(day, panel),
                             Anchor = (AnchorStyles.Left | AnchorStyles.Top),
                             Name = "dayNumber" + day.ToString()
                         };
-                        dayNumber.Location = new Point(3,3);
+                        dayNumber.Location = new Point(3, 3);
 
                         panel.Controls.Add(dayNumber);
 
@@ -248,6 +272,13 @@ namespace Forms.Form1
 
             #endregion
         }
+
+        private void AddNewTaskManuallyPanel_Click(object sender, EventArgs e)
+        {
+            AddTaskManually form = new AddTaskManually();
+            form.Show();
+        }
+
         private string GetDay(int index,Panel head)
         {
             string output = "";
@@ -389,7 +420,6 @@ namespace Forms.Form1
                         && TaskModel.Date_Table[j].Month_ID == monthNumber)
                     {
                         taskNumber++;
-                        Console.WriteLine(taskNumber);
                         unFinishedTasks.Add(TaskModel.SelectTaskByDayNumber_Row(taskNumber,
                             daysNumber[i], MainFormModel.Month,true),daysNumber[i]);
                     }
@@ -411,7 +441,6 @@ namespace Forms.Form1
                     {
                         taskPerDay++;
 
-                        Console.WriteLine(taskPerDay);
                         if (taskPerDay > 1)
                         {
                             Panel flagPanel = dayPanels[i].Controls.OfType<Panel>().ToList().Where(x => x.Name.Contains("flagPanel")).First();
@@ -484,7 +513,7 @@ namespace Forms.Form1
                 };
                 flag.Location = GetNeededFlag_Position(flag.Size.Width, CountTask);
 
-                flag.Click += SelectedFlag_Click;
+                flag.Click += flagTask_Click;
                 
                 Head.Controls.Add(flag);
             }
@@ -574,8 +603,22 @@ namespace Forms.Form1
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            SizeModified();
             form.Update();
+
+            if(this.WindowState == FormWindowState.Minimized)
+            {
+                int currentDayTasks = TaskModel.GetCurrentDayTaskNumber_Not_Completed(DateTime.Now.Month, DateTime.Now.Day);
+                if (currentDayTasks > 0)
+                {
+                    notifyIcon1.BalloonTipText = $"Mára még {currentDayTasks} feladatod van!";
+                    notifyIcon1.ShowBalloonTip(1000);
+                }
+                else
+                {
+                    notifyIcon1.BalloonTipText = $"Esetleg gyere vissza később!";
+                    notifyIcon1.ShowBalloonTip(1000);
+                }
+            }
         }
 
         #endregion
@@ -583,21 +626,46 @@ namespace Forms.Form1
 
         #region Click_Events
 
+        #region MENU
+
+        private void prevMonthBtn_Click_1(object sender, EventArgs e)
+        {
+            MonthNumber -= 1;
+            MainFormModel.Month -= 1;
+            if (MonthNumber == 0)
+            {
+                CurrentYear--;
+                MonthNumber = 12;
+                MainFormModel.Month = 12;
+            }
+            RefreshTable();
+        }
+
+        private void nextMonthBtn_Click_1(object sender, EventArgs e)
+        {
+            MonthNumber += 1;
+            MainFormModel.Month += 1;
+            if (MonthNumber == 13)
+            {
+                CurrentYear++;
+                MonthNumber = 1;
+                MainFormModel.Month = 1;
+            }
+            RefreshTable();
+        }
+
+        #endregion
+
         #region DayPanel
 
         private void dayPanel_Click(object sender, EventArgs e)
         {
             
             Panel rootPanel = (Panel)sender;
-            int selectDayNumber = InputModel.Int(rootPanel.Name);
 
-            string result=GetDay(selectDayNumber, null);
-            int day = int.Parse(result);
+            MainFormModel.Day = int.Parse(rootPanel.Controls[0].Text);
 
-            SelectedMonthNumber = day;
-            MainFormModel.Day = SelectedMonthNumber;
-
-            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(selectDayNumber,MonthNumber, true);
+            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(MainFormModel.Day, MainFormModel.Month);
 
             try
             {
@@ -616,8 +684,38 @@ namespace Forms.Form1
         {
             PictureBox root = (PictureBox)sender;
 
-            //IDE EGY EDIT-COMPLTE megoldás
-            MessageBox.Show(InputModel.Int(root.Name).ToString());
+            Panel head = (Panel)root.Parent;
+
+            Panel body = (Panel)head.Parent;
+
+            body.Click += flagTask_Click;
+        }
+        private void flagTask_Click(object sender, EventArgs e)
+        {
+
+            PictureBox root = (PictureBox)sender;
+
+            Panel head = (Panel)root.Parent;
+
+            Panel rootPanel = (Panel)head.Parent;
+
+            MessageBox.Show(rootPanel.Name);
+            MainFormModel.Day = int.Parse(rootPanel.Controls[0].Text);
+
+            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(MainFormModel.Day, MainFormModel.Month);
+
+            try
+            {
+                EditForm form = new EditForm();
+                form.Show();
+
+                this.Hide();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
+
         }
 
         #endregion
@@ -632,6 +730,7 @@ namespace Forms.Form1
         #endregion
 
         #endregion
+
 
         #region Refresh the Table
 
@@ -665,32 +764,17 @@ namespace Forms.Form1
             LoadUserData_OnLoad();
         }
 
+
         #endregion
 
-        private void prevMonthBtn_Click_1(object sender, EventArgs e)
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            MonthNumber -= 1;
-            MainFormModel.Month -= 1;
-            if (MonthNumber == 0)
-            {
-                CurrentYear--;
-                MonthNumber = 12;
-                MainFormModel.Month = 12;
-            }
-            RefreshTable();
+            this.WindowState = FormWindowState.Normal;
         }
 
-        private void nextMonthBtn_Click_1(object sender, EventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MonthNumber += 1;
-            MainFormModel.Month += 1;
-            if (MonthNumber == 13)
-            {
-                CurrentYear++;
-                MonthNumber = 1;
-                MainFormModel.Month = 1;
-            }
-            RefreshTable();
+            Application.Exit();
         }
     }
 }

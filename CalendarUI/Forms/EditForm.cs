@@ -15,9 +15,6 @@ namespace CalendarUI.Forms
 {
     public partial class EditForm : Form
     {
-        private int sMonthNumber = 0;
-        private int sDayNumber = 0;
-
         private static DataModel.Task test = new DataModel.Task();
         private static DataModel.Task test2 = new DataModel.Task();
 
@@ -71,8 +68,11 @@ namespace CalendarUI.Forms
             succededLabel.Text = TaskModel.GetCurrentDayTaskNumber_Completed(MainFormModel.Month, MainFormModel.Day).ToString();
 
             string finalTxt = MainFormModel.Month < 10 ? "0" + MainFormModel.Month.ToString() : MainFormModel.Month.ToString();
-            monthLabel.Text = finalTxt + "." + MainFormModel.Day;
+            string finalDTxt = MainFormModel.Day < 10 ? "0" + MainFormModel.Day.ToString() : MainFormModel.Day.ToString();
+            monthLabel.Text = finalTxt + "." + finalDTxt;
+            monthLabel.Location = new Point(showPnTitlePn.Width / 2 - monthLabel.Width / 2, monthLabel.Location.Y);
             dayLabel.Text = InputModel.GetMonthDayName(MainFormModel.Month, MainFormModel.Day);
+            dayLabel.Location = new Point(showPnTitlePn.Width / 2 - dayLabel.Width / 2, dayLabel.Location.Y);
         }
 
         private void SetBasiclblContents()
@@ -329,12 +329,12 @@ namespace CalendarUI.Forms
             PictureBox line = null;
 
             //Still waiting
-            if(task.IsComplete == 0 && now.Day < sDayNumber)
+            if(task.IsComplete == 0 && now.Day < MainFormModel.Day)
             {
                 line=FollowLine("waiting");
             }
             //Unfinished
-            else if (task.IsComplete == 0 && now.Day > sDayNumber)
+            else if (task.IsComplete == 0 && now.Day > MainFormModel.Day)
             {
                 line=FollowLine("unfinished");
             }
@@ -351,9 +351,7 @@ namespace CalendarUI.Forms
 
         private void GenerateTaskPanels()
         {
-            List<DataModel.Task> tasks = TaskModel.SelectTaskByDayNumber_List(sDayNumber, sMonthNumber);
-
-            Loaded_Data_Tasks = tasks;
+            Loaded_Data_Tasks = TaskModel.Selected_Tasks;
 
             Clicked_TaskPanel = new List<bool>();
             for (int i = 0; i < Loaded_Data_Tasks.Count; i++)
@@ -363,7 +361,7 @@ namespace CalendarUI.Forms
 
             int counter = 0;
 
-            foreach (var item in tasks)
+            foreach (var item in Loaded_Data_Tasks)
             {
                 showPnTaskPn.Controls.Add(SetTaskPanelSettings(item, counter));
 
@@ -377,7 +375,7 @@ namespace CalendarUI.Forms
 
         private void GenerateAddPanel()
         {
-            addCurrentDayPanel.Location = new Point(addCurrentDayPanel.Location.X, lastTaskPanelPosY + addCurrentDayPanel.Height/2);
+            addCurrentDayPanel.Location = new Point(showPnTaskPn.Width/2-addCurrentDayPanel.Width/2, lastTaskPanelPosY + addCurrentDayPanel.Height/3);
             addCurrentDayPanel.Enabled = true;
             addCurrentDayPanel.Visible = true;
         }
@@ -420,9 +418,6 @@ namespace CalendarUI.Forms
         
         private void InsertForm_Load(object sender, EventArgs e)
         {
-            sMonthNumber = Form1.MonthNumber;
-            sDayNumber = Form1.SelectedMonthNumber;
-
             Testing_Data();
 
             SetBasiclblContents();
