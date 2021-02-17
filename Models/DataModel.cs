@@ -21,6 +21,7 @@ namespace Calendar.Models
             public DateTime Alarm_Date { get; set; }
             public string Content { get; set; }
             public int IsComplete { get; set; }
+            public Dictionary<DateTime, bool> Alarm_Check = new Dictionary<DateTime, bool>();
         }
     }
 }

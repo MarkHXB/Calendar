@@ -11,27 +11,36 @@ using System.Runtime.InteropServices;
 using Calendar.Models;
 using CalendarUI.Forms;
 using CalendarLibrary.Models;
+using CalendarLibrary.Models.Alarm;
+using System.Threading;
 
 namespace Forms.Form1
 {
     public partial class Form1 : Form
     {
+        bool alert = true;
+        int most = DateTime.Now.Minute + 1;
         Random rnd = new Random();
         public List<Panel> dayPanels = new List<Panel>();
         public int MenuOptions = 2;
         public int MenuOptionsRow = 1;
 
+
+        public static List<DataModel.Task> AlertTasks = new List<DataModel.Task>();
+
         #region ForEditForm
 
-        public static int CurrentYear = MainFormModel.Year;
-        public static int MonthNumber = MainFormModel.Month;
         public static int SelectedMonthNumber = 1;
 
         public static Form form = null;
 
+        public static NotifyIcon App_Icon = null;
+
         public TableLayoutPanel Table = null;
 
         private int FlowedDays = 0;
+
+        internal static UserInformationModel UserSettings = null;
 
         #endregion
 
@@ -41,21 +50,23 @@ namespace Forms.Form1
             InitializeComponent();
             form = this;
             Table = new TableLayoutPanel();
+            UserSettings = Settings.LoadSettings();
         }
         public static void RefreshForm()
         {
-            TaskModel.RefreshLocalDB();
+            TaskModel.RefreshLocalDB_CalendarForm();
 
             form.Refresh();
         }
         
         private void LoadCalendar_OnLoad()
         {
+            
 
             SetTableConfig();
 
             //1.: Set month days
-            CalcutaMonthDays(MonthNumber);
+            CalcutaMonthDays(MainFormModel.Month);
 
             //2.: Generate Calendar
             GenerateCalendarTemplate();
@@ -65,13 +76,15 @@ namespace Forms.Form1
 
             //4.: Load the data
             LoadUserData_OnLoad();
+
+            AlertThread();
         }
 
         #region LoadUserData_OnLoad MAIN functions
 
         private void CalcutaMonthDays(int Month)
         {
-            LogModel.MakeAlart(new DataModel.Task() { Alarm_Date = DateTime.Now });
+            
  
             //SET CURRENT Month nUmber
             int monthDaysCount = CurrentMonthDayCount(Month);
@@ -189,7 +202,7 @@ namespace Forms.Form1
                         Label currentMonthTitle = new Label()
                         {
                             Name = "currentMonthTitle",
-                            Text = CurrentMonthName(MonthNumber),
+                            Text = CurrentMonthName(MainFormModel.Month),
                             Anchor = AnchorStyles.None,
                             TextAlign = ContentAlignment.MiddleCenter,
                         };
@@ -232,18 +245,42 @@ namespace Forms.Form1
 
                         Table.Controls.Add(head, i, j);
                     }
+                    else if(j==MenuOptionsRow && i== columns-1)
+                    {
+                        Panel head = new Panel()
+                        { 
+                            BackColor = Color.White,
+                            Dock=DockStyle.Fill
+                        };
+                        Label settingsTitle = new Label()
+                        {
+                            Name="settingsUser",
+                            Text="Beállítások",
+                            Font=new Font(new FontFamily(this.Font.Name),11f,FontStyle.Bold),
+                            Anchor=AnchorStyles.Left
+                        };
+                        settingsTitle.Location = new Point(head.Width / 2- settingsTitle.Size.Width, head.Height / 2);
+                        settingsTitle.Click+=Settings_Click;
+                        head.Controls.Add(settingsTitle);
+
+                        Table.Controls.Add(head, i, j);
+                    }
 
                     //Task panels
                     else if (j > 1)
                     {
                         //Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-
+                        
                         Panel panel = new Panel()
                         {
                             Name = "dayPanel" + day.ToString(),
                             BackColor = Color.White,
                             Dock = DockStyle.Fill,
+                            
                         };
+                        
+                        panel.Click += dayPanel_Click;
+                        panel.Paint += dayPanel_Paint;
 
                         Label dayNumber = new Label()
                         {
@@ -253,11 +290,36 @@ namespace Forms.Form1
                         };
                         dayNumber.Location = new Point(3, 3);
 
+
+                        //coming soon
+                        /*
+                        if (day == DateTime.Now.Day)
+                        {
+                            Panel currentDayWarn = new Panel()
+                            {
+                                Name="currentDayWarnPanel",
+                                BackColor=Color.FromArgb(70, 192, 192, 255),
+                                Dock=DockStyle.Bottom
+                            };
+                            currentDayWarn.Size = new Size(currentDayWarn.Width, 40);
+                            panel.Controls.Add(currentDayWarn);
+
+                            Label todayTitle = new Label()
+                            {
+                                Name="currentDayWarnTitle",
+                                BackColor=Color.Transparent,
+                                Anchor=(AnchorStyles.Bottom),
+                                Text=InputModel.GetMonthDayName(DateTime.Now.Month,DateTime.Now.Day),
+                                Font=new Font(new FontFamily(this.Font.Name),11f,FontStyle.Bold)
+                            };
+                            todayTitle.Location = new Point(panel.Width/2-todayTitle.Width/2, currentDayWarn.Height / 4);
+                            currentDayWarn.Controls.Add(todayTitle);
+
+                        }
+                        */
+
+
                         panel.Controls.Add(dayNumber);
-
-                        panel.Click += dayPanel_Click;
-                        panel.Paint += dayPanel_Paint;
-
                         Table.Controls.Add(panel, i, j);
 
                         day++;
@@ -271,6 +333,110 @@ namespace Forms.Form1
             SetMonthChooserConfig();
 
             #endregion
+        }
+
+        private void AlertThread()
+        {
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(30000);
+                    AlertTasks = AlarmModel.Alarm(UserSettings);
+                    MakeAlert();
+                    MessageBox.Show(Thread.CurrentThread.Name);
+                }
+            }).Start();
+
+           
+        }
+        private void MakeAlert()
+        {
+            MakeAlert_Minimized();
+            MakeAlert_Normal();
+            
+
+        }
+        private void MakeAlert_Minimized()
+        {
+            
+
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                foreach (var item in AlertTasks)
+                {
+                    int index = 0;
+                    foreach (KeyValuePair<DateTime, bool> alarm in item.Alarm_Check)
+                    {
+                        if (alarm.Key <=DateTime.Now && alarm.Value == false)
+                        {
+                            notifyIcon1.BalloonTipText = $"Figyelemeztetés!\nNe felejtsd el a/az {item.Content}";
+                            notifyIcon1.ShowBalloonTip(3000);
+
+                            List<DateTime> keys = new List<DateTime>(item.Alarm_Check.Keys);
+                            for (int i = 0; i < keys.Count; i++)
+                            {
+                                if (i == (index == 0 ? 0 : index - 1))
+                                {
+                                    AlarmModel.CompleteTaskAlert(item, alarm.Key);
+                                    break;
+                                }
+                            }
+
+                            //AlarmModel.CorrectToTrueTheAlarm(item);
+
+                            break;
+                        }
+                        index++;
+                    }
+
+                    
+                }
+                
+            }
+        }
+        private void MakeAlert_Normal()
+        {
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                
+                foreach (var item in AlertTasks)
+                {
+                    int index = 0;
+                    foreach (KeyValuePair<DateTime,bool> alarm in item.Alarm_Check)
+                    {
+                        if (alarm.Key <= DateTime.Now && alarm.Value == false)
+                        {
+                            Console.WriteLine(alarm.Key+" "+alarm.Value);
+                            MessageBox.Show($"Figyelemeztetés!\nNe felejtsd el a/az\n{item.Content}");
+
+                            List<DateTime> keys = new List<DateTime>(item.Alarm_Check.Keys);
+                            for (int i = 0; i < keys.Count; i++)
+                            {
+                                if (i == (index==0? 0 :index-1))
+                                {
+                                    AlarmModel.CompleteTaskAlert(item, alarm.Key);
+                                    break;
+                                }
+                            }
+
+                            // AlarmModel.CorrectToTrueTheAlarm(item); 
+                           
+                            break;
+                        }
+                        index++;
+                    } 
+                }
+            }
+        }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            Settings form = new Settings();
+
+            form.Show();
+
+            this.Hide();
         }
 
         private void AddNewTaskManuallyPanel_Click(object sender, EventArgs e)
@@ -310,7 +476,8 @@ namespace Forms.Form1
                     {
                         if (e.Column == j && e.Row == i)
                         {
-                            e.Graphics.DrawRectangle(new Pen(Color.FromArgb(50, 175, 176, 179)), e.CellBounds);
+                            //e.Graphics.DrawRectangle(new Pen(Color.FromArgb(50, 175, 176, 179)), e.CellBounds);
+                            e.Graphics.DrawRectangle(new Pen(UserSettings.TemplateColor), e.CellBounds);
                         }
                     }
                 }
@@ -318,30 +485,7 @@ namespace Forms.Form1
             
         }
 
-        private void monthChooserPanel_Paint(object sender, PaintEventArgs e)
-        {
-            Panel panel = (Panel)sender;
-
-            /*
-            ControlPaint.DrawBorder(e.Graphics, panel.ClientRectangle,
-               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // left
-               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // top
-               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // right
-               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid);// bottom   
-            
-            */
-        }
-
-        private void dayPanel_Paint(object sender,PaintEventArgs e)
-        {
-            Panel panel = (Panel)sender;
-            
-            ControlPaint.DrawBorder(e.Graphics, panel.ClientRectangle,
-              Color.FromArgb(90, 162, 171, 165), 1, ButtonBorderStyle.Solid, // left
-              Color.FromArgb(90, 162, 171, 165), 1, ButtonBorderStyle.Solid, // top
-              Color.FromArgb(90, 162, 171, 165), 1, ButtonBorderStyle.Solid, // right
-              Color.FromArgb(90, 162, 171, 165), 1, ButtonBorderStyle.Solid);// bottom
-        }
+        
 
         private void SizeModified()
         {
@@ -381,7 +525,14 @@ namespace Forms.Form1
 
             //4.: Fill the root panels( day panels ) with subpanels ( flags )
             DrawTasksPanel(unFinishedTasks, daysNumber);
-            
+
+            for (int i = 0; i < TaskModel.Task_Table.Count; i++)
+            {
+                if (TaskModel.Task_Table[i].Alarm_Date > DateTime.Now)
+                {
+                    AlarmModel.TestAlarm(UserSettings, TaskModel.Task_Table[i]);
+                }
+            }
         }
 
         #endregion
@@ -467,7 +618,8 @@ namespace Forms.Form1
             {
                 Name = "titlePanel" + dayNumber.ToString(),
                 Dock = DockStyle.Top,
-                BackColor=Color.Transparent
+                BackColor=Color.Transparent,
+                Cursor = Cursors.Hand
             };
             titlePanel.Size = new Size(titlePanel.Width, 33);
 
@@ -476,10 +628,11 @@ namespace Forms.Form1
             {
                 Name = "flagPanel" + dayNumber.ToString(),
                 Dock = DockStyle.Top,
-                BackColor=Color.Transparent
+                BackColor=Color.Transparent,
+                Cursor = Cursors.Hand
             };
             flagPanel.Size = new Size(flagPanel.Width, 37);
-
+            flagPanel.Click += FlagPanel_Click;
 
             Control[] ctl =
             {
@@ -488,6 +641,9 @@ namespace Forms.Form1
 
             return ctl;
         }
+
+       
+
         private void PushFlagToPanel(int Level,Panel Head,int CountTask)
         {
             if (CountTask >= 3)
@@ -510,6 +666,7 @@ namespace Forms.Form1
                     Image = GetNeededFlag_Image(Level),
                     Name = "flag" + "_" + InputModel.Int(Head.Name),
                     Anchor=AnchorStyles.Left,
+                    Cursor = Cursors.Hand
                 };
                 flag.Location = GetNeededFlag_Position(flag.Size.Width, CountTask);
 
@@ -594,142 +751,8 @@ namespace Forms.Form1
         #endregion
 
 
-        #region Form_Events
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            LoadCalendar_OnLoad();
-        }
-
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-            form.Update();
-
-            if(this.WindowState == FormWindowState.Minimized)
-            {
-                int currentDayTasks = TaskModel.GetCurrentDayTaskNumber_Not_Completed(DateTime.Now.Month, DateTime.Now.Day);
-                if (currentDayTasks > 0)
-                {
-                    notifyIcon1.BalloonTipText = $"Mára még {currentDayTasks} feladatod van!";
-                    notifyIcon1.ShowBalloonTip(1000);
-                }
-                else
-                {
-                    notifyIcon1.BalloonTipText = $"Esetleg gyere vissza később!";
-                    notifyIcon1.ShowBalloonTip(1000);
-                }
-            }
-        }
-
-        #endregion
-
-
-        #region Click_Events
-
-        #region MENU
-
-        private void prevMonthBtn_Click_1(object sender, EventArgs e)
-        {
-            MonthNumber -= 1;
-            MainFormModel.Month -= 1;
-            if (MonthNumber == 0)
-            {
-                CurrentYear--;
-                MonthNumber = 12;
-                MainFormModel.Month = 12;
-            }
-            RefreshTable();
-        }
-
-        private void nextMonthBtn_Click_1(object sender, EventArgs e)
-        {
-            MonthNumber += 1;
-            MainFormModel.Month += 1;
-            if (MonthNumber == 13)
-            {
-                CurrentYear++;
-                MonthNumber = 1;
-                MainFormModel.Month = 1;
-            }
-            RefreshTable();
-        }
-
-        #endregion
-
-        #region DayPanel
-
-        private void dayPanel_Click(object sender, EventArgs e)
-        {
-            
-            Panel rootPanel = (Panel)sender;
-
-            MainFormModel.Day = int.Parse(rootPanel.Controls[0].Text);
-
-            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(MainFormModel.Day, MainFormModel.Month);
-
-            try
-            {
-                EditForm form = new EditForm();
-                form.Show();
-
-                this.Hide();
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show(x.Message);
-            }
-            
-        }
-        private void SelectedFlag_Click(object sender, EventArgs e)
-        {
-            PictureBox root = (PictureBox)sender;
-
-            Panel head = (Panel)root.Parent;
-
-            Panel body = (Panel)head.Parent;
-
-            body.Click += flagTask_Click;
-        }
-        private void flagTask_Click(object sender, EventArgs e)
-        {
-
-            PictureBox root = (PictureBox)sender;
-
-            Panel head = (Panel)root.Parent;
-
-            Panel rootPanel = (Panel)head.Parent;
-
-            MessageBox.Show(rootPanel.Name);
-            MainFormModel.Day = int.Parse(rootPanel.Controls[0].Text);
-
-            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(MainFormModel.Day, MainFormModel.Month);
-
-            try
-            {
-                EditForm form = new EditForm();
-                form.Show();
-
-                this.Hide();
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show(x.Message);
-            }
-
-        }
-
-        #endregion
-
-        #region Monts
-        private void nextMonth_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-
-        #endregion
-
-        #endregion
+    
 
 
         #region Refresh the Table
@@ -747,12 +770,15 @@ namespace Forms.Form1
             this.Controls.Add(Table);
 
             FlowedDays = 0;
+            dayPanels = new List<Panel>();
+
+            App_Icon = notifyIcon1;
         }
         private void RefreshTable()
         {
             SetTableConfig();
 
-            CalcutaMonthDays(MonthNumber);
+            CalcutaMonthDays(MainFormModel.Month);
 
             //2.: Generate Calendar
             GenerateCalendarTemplate();
@@ -767,14 +793,193 @@ namespace Forms.Form1
 
         #endregion
 
+      
+
+        #region FormEvents
+
+        #region Click
+
+        #region Form_Events
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LoadCalendar_OnLoad();
+        }
+       
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            form.Update();
+        
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                int currentDayTasks = TaskModel.GetCurrentDayTaskNumber_Not_Completed(DateTime.Now.Month, DateTime.Now.Day);
+                if (currentDayTasks > 0)
+                {
+                    notifyIcon1.BalloonTipText = $"Mára még {currentDayTasks} feladatod van!";
+                    notifyIcon1.ShowBalloonTip(1000);
+                }
+                else
+                {
+                    notifyIcon1.BalloonTipText = $"Esetleg gyere vissza később!";
+                    notifyIcon1.ShowBalloonTip(1000);
+                }
+            }
+        }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            #region Application Icon
+
+            notifyIcon1.Icon = null;
+            notifyIcon1.Dispose();
+            Application.DoEvents();
+
+            #endregion
+
+            Application.Exit();
+        }
+        #endregion
+
+        #region Panel_Click
+        private void dayPanel_Click(object sender, EventArgs e)
+        {
+
+            Panel rootPanel = (Panel)sender;
+
+            MainFormModel.Day = int.Parse(rootPanel.Controls[0].Text);
+
+            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(MainFormModel.Day, MainFormModel.Month);
+
+            try
+            {
+                EditForm form = new EditForm();
+                form.Show();
+
+                this.Hide();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
+
+        }
+        private void FlagPanel_Click(object sender, EventArgs e)
+        {
+            Panel head = (Panel)sender;
+
+            Panel rootPanel = (Panel)head.Parent;
+
+            MainFormModel.Day = int.Parse(rootPanel.Controls[0].Text);
+
+            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(MainFormModel.Day, MainFormModel.Month);
+
+            try
+            {
+                EditForm form = new EditForm();
+                form.Show();
+
+                this.Hide();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
+        }
+        #endregion
+
+        #region Button_Click
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             this.WindowState = FormWindowState.Normal;
         }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void prevMonthBtn_Click_1(object sender, EventArgs e)
         {
-            Application.Exit();
+            MainFormModel.Month -= 1;
+            if (MainFormModel.Month == 0)
+            {
+                MainFormModel.Year--;
+                MainFormModel.Month = 12;
+            }
+            RefreshTable();
         }
+
+        private void nextMonthBtn_Click_1(object sender, EventArgs e)
+        {
+            MainFormModel.Month += 1;
+            if (MainFormModel.Month == 13)
+            {
+                MainFormModel.Year++;
+                MainFormModel.Month = 1;
+            }
+            RefreshTable();
+        }
+        #endregion
+
+
+        //It contains Flag
+        #region PictureBox_Click
+        private void flagTask_Click(object sender, EventArgs e)
+        {
+
+            PictureBox root = (PictureBox)sender;
+
+            Panel head = (Panel)root.Parent;
+
+            Panel rootPanel = (Panel)head.Parent;
+
+           
+            MainFormModel.Day = int.Parse(rootPanel.Controls[0].Text);
+
+            TaskModel.Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(MainFormModel.Day, MainFormModel.Month);
+
+            try
+            {
+                EditForm form = new EditForm();
+                form.Show();
+
+                this.Hide();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }
+
+        }
+        #endregion
+
+        #endregion
+
+        #region Paint
+
+        #region Panel_Paint
+
+        private void monthChooserPanel_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = (Panel)sender;
+
+            /*
+            ControlPaint.DrawBorder(e.Graphics, panel.ClientRectangle,
+               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // left
+               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // top
+               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid, // right
+               Color.FromArgb(50, 162, 171, 165), 1, ButtonBorderStyle.Solid);// bottom   
+            
+            */
+        }
+
+        private void dayPanel_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = (Panel)sender;
+
+            ControlPaint.DrawBorder(e.Graphics, panel.ClientRectangle,
+              Color.FromArgb(85,UserSettings.TemplateColor), 1, ButtonBorderStyle.Solid, // left
+              Color.FromArgb(85, UserSettings.TemplateColor), 1, ButtonBorderStyle.Solid, // top
+              Color.FromArgb(85, UserSettings.TemplateColor), 1, ButtonBorderStyle.Solid, // right
+              Color.FromArgb(85, UserSettings.TemplateColor), 1, ButtonBorderStyle.Solid);// bottom
+        }
+
+        #endregion
+
+        #endregion
+
+        #endregion
     }
 }

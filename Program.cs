@@ -15,8 +15,7 @@ namespace Calendar
         [STAThread]
         static void Main()
         {
-
-            Console.ReadLine();
+            
         }
     }
 }

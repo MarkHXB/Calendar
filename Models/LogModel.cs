@@ -108,30 +108,51 @@ namespace Calendar.Models
 
         #region Functions
 
-        public static void MakeAlart(DataModel.Task UserTask)
+        public static string Alert(List<DataModel.Task> UserTasks,MessageBox InfoBox)
         {
+            string output = null;
+
             DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             try
             {
-                if (UserTask.Alarm_Date.Year == now.Year&&
-                    UserTask.Alarm_Date.Month==now.Month&&
-                    UserTask.Alarm_Date.Day==now.Day)
+                if (UserTasks[0].Alarm_Date.Year == now.Year&&
+                    UserTasks[0].Alarm_Date.Month==now.Month&&
+                    UserTasks[0].Alarm_Date.Day==now.Day)
                 {
-                    AlarmUser();
+                    output=AlarmUser(UserTasks,InfoBox);
                 }
             }
             catch(Exception x)
             {
 
             }
+
+            return output;
         }
 
-        private static void AlarmUser()
+        private static string AlarmUser(List<DataModel.Task>UserTasks,MessageBox box)
         {
-            
+            string output = "";
+
+            if (box == null)
+            {
+                string text = $"Mára még hátravan: {UserTasks.Count} feladatod" +
+                    $"\n Feladatok: \n";
+
+                foreach (var item in UserTasks)
+                {
+                    string taskTitle = $"\n - {item.Content}\n";
+                    text += taskTitle;
+                }
+
+                output = text;
+            }
+
+            return output;
         }
 
         #endregion
+
 
         #region Properties
 

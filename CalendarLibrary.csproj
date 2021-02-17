@@ -48,8 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>Calendar.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -70,10 +69,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AlarmModel.cs" />
     <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\FileSystemModel.cs" />
     <Compile Include="Models\InputModel.cs" />
     <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\MainFormModel.cs" />
+    <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\StyleModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\UserInformationModel.cs" />

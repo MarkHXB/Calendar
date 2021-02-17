@@ -184,6 +184,7 @@ namespace CalendarUI.Forms
             this.unsuccededLabel.Size = new System.Drawing.Size(34, 15);
             this.unsuccededLabel.TabIndex = 5;
             this.unsuccededLabel.Text = "point";
+            this.unsuccededLabel.Click += new System.EventHandler(this.unsuccededLabel_Click);
             // 
             // succededTitle
             // 
@@ -313,6 +314,7 @@ namespace CalendarUI.Forms
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "EditForm";
             this.Text = "Calendar";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditForm_FormClosing);
             this.Load += new System.EventHandler(this.InsertForm_Load);
             this.panel2.ResumeLayout(false);
             this.showPnTaskPn.ResumeLayout(false);

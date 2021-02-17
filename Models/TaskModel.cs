@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalendarLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -591,19 +592,19 @@ namespace Calendar.Models
         public static int GetCurrentDayTaskNumber_Completed(int MonthNumber, int DayNumber)
         {
             int output = 0;
-            int index = 0;
 
             foreach (var item in Date_Table)
             {
                 if (item.Month_ID == MonthNumber && item.Date_ID == DayNumber)
                 {
-                    if (Task_Table[index].IsComplete == 1)
+                    foreach (var task in Task_Table)
                     {
-                        output++;
+                        if(task.Id == item.Task_ID && task.IsComplete==1)
+                        {
+                            output++;
+                        }
                     }
                 }
-
-                index++;
             }
 
             return output;
@@ -616,19 +617,19 @@ namespace Calendar.Models
         public static int GetCurrentDayTaskNumber_Not_Completed(int MonthNumber, int DayNumber)
         {
             int output = 0;
-            int index = 0;
 
             foreach (var item in Date_Table)
             {
                 if (item.Month_ID == MonthNumber && item.Date_ID == DayNumber)
                 {
-                    if (Task_Table[index].IsComplete == 0)
+                    foreach (var task in Task_Table)
                     {
-                        output++;
+                        if (task.Id == item.Task_ID && task.IsComplete == 0)
+                        {
+                            output++;
+                        }
                     }
                 }
-
-                index++;
             }
 
             return output;
@@ -727,13 +728,25 @@ namespace Calendar.Models
         {
             if (Date_Table.Count == 0) { Read(); }
         }
-        public static void RefreshLocalDB()
+        public static void RefreshLocalDB_EditForm()
         {
             Date_Table = new List<DataModel.Date>();
             Task_Table = new List<DataModel.Task>();
 
             Read();
+
+            Selected_Tasks = TaskModel.SelectTaskByDayNumber_List(MainFormModel.Day, MainFormModel.Month);
         }
+        public static void RefreshLocalDB_CalendarForm()
+        {
+            Date_Table = new List<DataModel.Date>();
+            Task_Table = new List<DataModel.Task>();
+
+            Selected_Tasks = new List<DataModel.Task>();
+
+            Read();
+        }
+
 
         #endregion
 

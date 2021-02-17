@@ -5,11 +5,23 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Forms.CalendarForm;
+using System.Runtime.InteropServices;
 
 namespace Forms.Main
 {
     public partial class MainForm : Form
     {
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+            (
+            int nLeft,
+            int nTop,
+            int nRight, 
+            int nBottom,
+            int nWidthEllipse,
+            int nHeightEllipse
+            );
+
         private static int currentDBindex=0;
          private static bool restoreData=true;
          public static Form form = null;
@@ -670,22 +682,7 @@ namespace Forms.Main
          #region Functions
          private void CollectCurrentDayTasks_OnLoad()
          {
-             /*foreach (var item in Task.DbContent)
-             {
-                 if (item.Date_Id == Calendar.choosedDay)
-                 {
-                     Calendar.selectedTask.Add(new Task
-                     {
-                         Date_Id = item.Date_Id,
-                         Task_Id_Dates=item.Task_Id_Dates,
-                         TaskLevel = item.TaskLevel,
-                         Alarm = item.Alarm,
-                         TaskContent = item.TaskContent,
-                         TaskComplete = item.TaskComplete
-                     });
-
-                 }
-             }*/
+            panel7.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, panel7.Width, panel7.Height, 30, 30));
          }
          private int CountTasks()
          {
@@ -788,6 +785,11 @@ namespace Forms.Main
         private void comboBox1_TextChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void panel7_Paint(object sender, PaintEventArgs e)
+        {
+           
         }
     }
 

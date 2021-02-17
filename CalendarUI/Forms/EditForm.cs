@@ -155,10 +155,18 @@ namespace CalendarUI.Forms
                 Multiline = true,
                 ScrollBars = ScrollBars.Vertical
             };
+            Label taskTime = new Label()
+            {
+                Name = "taskPanelTimeWarn" + index.ToString(),
+                Text = task.Alarm_Date.ToString("HH:mm"),
+                Font = new Font(new FontFamily(this.Font.Name), 11f),
+                Location=new Point(5,panel.Height-25),
+                BackColor=Color.Transparent
+            };
 
             Control[] panelContent =
             {
-                dayTitle,taskContent,completeBtn,deleteBtn
+                dayTitle,taskContent,completeBtn,deleteBtn,taskTime
             };
 
             panel.Click += taskPanel_Click;
@@ -169,7 +177,27 @@ namespace CalendarUI.Forms
 
             return panel;
         }
+        /// <summary>
+        /// for others
+        /// </summary>
+        private void RefreshForm_New()
+        {
 
+        }
+        /// <summary>
+        /// For delete and complet
+        /// </summary>
+        private void RefreshForm_Old()
+        {
+
+            this.Hide();
+
+            TaskModel.RefreshLocalDB_EditForm();
+
+            EditForm form = new EditForm();
+
+            form.Show();
+        }
         private void taskDeleteBtn_Click(object sender, EventArgs e)
         {
             try
@@ -195,7 +223,7 @@ namespace CalendarUI.Forms
                     }
                 }
 
-                RefreshForm();
+                RefreshForm_Old();
             }
             catch (Exception x)
             {
@@ -228,7 +256,7 @@ namespace CalendarUI.Forms
                     }    
                 }
 
-                RefreshForm();
+                RefreshForm_Old();
             }
             catch (Exception x)
             {
@@ -264,6 +292,17 @@ namespace CalendarUI.Forms
                     
                 }
             }
+
+            foreach (var item in TaskModel.Date_Table)
+            {
+                foreach (var date in Loaded_Data_Tasks)
+                {
+                    if(date.Id == item.Task_ID)
+                    {
+                        SelectedRow_Date = item;
+                    }
+                }
+            }
     
             try
             {
@@ -274,7 +313,8 @@ namespace CalendarUI.Forms
                 TextBox alarmBox = modifyPanel.Controls.OfType<TextBox>().ToList().Where(x => x.Name.Contains("modifyAlarmDate")).First();
                 TextBox contentBox = modifyPanel.Controls.OfType<TextBox>().ToList().Where(x => x.Name.Contains("modifyContentBox")).First();
 
-                alarmBox.Text = Date.Text;
+
+                alarmBox.Text = MainFormModel.Year + "." + SelectedRow_Date.Month_ID.ToString() + "." + SelectedRow_Date.Date_ID.ToString();
                 contentBox.Text = Content.Text;
 
                 updatePanel = modifyPanel;
@@ -338,6 +378,10 @@ namespace CalendarUI.Forms
             {
                 line=FollowLine("unfinished");
             }
+            else if(task.IsComplete == 0 && now.Day == MainFormModel.Day)
+            {
+                line = FollowLine("waiting");
+            }
             //Still waiting
             else if (task.IsComplete == 1)
             {
@@ -382,7 +426,7 @@ namespace CalendarUI.Forms
 
         private void RefreshForm()
         {
-            TaskModel.RefreshLocalDB();
+            TaskModel.RefreshLocalDB_EditForm();
 
             this.Hide();
 
@@ -438,6 +482,8 @@ namespace CalendarUI.Forms
 
         private void backBtn_Click(object sender, EventArgs e)
         {
+            TaskModel.RefreshLocalDB_CalendarForm();
+
             Form1 form = new Form1();
             form.Show();
 
@@ -588,7 +634,7 @@ namespace CalendarUI.Forms
                 panel = new Panel()
                 {
                     Name = "insertPanel",
-                    Size = new Size(340, 312),
+                    Size = new Size(340, 367),
                     BackColor = Color.White,
                     Location = new Point(22, 176)
                 };
@@ -628,6 +674,20 @@ namespace CalendarUI.Forms
                     Font = new Font(new FontFamily(this.Font.Name), 11f),
                     Name = "insertContentTitle",
                     Location = new Point(190, 23)
+                };
+                Label hourTitle = new Label()
+                {
+                    Text = "Óra",
+                    Font = new Font(new FontFamily(this.Font.Name), 11f),
+                    Name = "insertHourTitle",
+                    Location = new Point(77, 197)
+                };
+                Label minuteTitle = new Label()
+                {
+                    Text = "Perc",
+                    Font = new Font(new FontFamily(this.Font.Name), 11f),
+                    Name = "insertHourTitle",
+                    Location = new Point(208, 197)
                 };
 
                 #region ComboBox_Year
@@ -688,11 +748,49 @@ namespace CalendarUI.Forms
 
                 #endregion
 
+                #region ComboBox_Hour
+
+                ComboBox cbHour = new ComboBox()
+                {
+                    Name = "insertDateHour",
+                    Text = "12",
+                    Font = new Font(new FontFamily(this.Font.Name), 14f),
+                    Size = new Size(63, 32),
+                    Location = new Point(68, 228)
+                };
+                int[] hours = Enumerable.Range(1, 24).ToArray();
+
+                for (int i = 0; i < hours.Length; i++)
+                {
+                    cbHour.Items.Add(hours[i]);
+                }
+
+                #endregion
+
+                #region ComboBox_Minute
+
+                ComboBox cbMinute = new ComboBox()
+                {
+                    Name = "insertDateMinute",
+                    Text = "30",
+                    Font = new Font(new FontFamily(this.Font.Name), 14f),
+                    Size = new Size(63, 32),
+                    Location = new Point(195, 228)
+                };
+                int[] minutes = Enumerable.Range(0, 60).ToArray();
+
+                for (int i = 0; i < minutes.Length; i++)
+                {
+                    cbMinute.Items.Add(minutes[i]);
+                }
+
+                #endregion
+
                 TextBox content = new TextBox()
                 {
                     Name="insertContent",
                     Size=new Size(309,51),
-                    Location=new Point(15,192),
+                    Location=new Point(14,278),
                     Multiline=true,
                     Font = new Font(new FontFamily(this.Font.Name), 12f),
                     ScrollBars=ScrollBars.Vertical
@@ -702,7 +800,7 @@ namespace CalendarUI.Forms
                 {
                     Name="insertBtn",
                     Text = "Hozzáad",
-                    Location = new Point(122, 265),
+                    Location = new Point(118, 335),
                     Font = new Font(new FontFamily(this.Font.Name), 12f),
                     Size = new Size(93,26)
                 };
@@ -712,9 +810,14 @@ namespace CalendarUI.Forms
                 Control[] ctl =
                 {
                 wTitle,lvl1,lvl2,lvl3,cTitle,cbYear,cbMonth,cbDay,
-                content, confirmBtn
+                content, confirmBtn,cbHour,cbMinute,
+                hourTitle,minuteTitle
                 };
-
+                cbYear.KeyPress += ComboBox_Key;
+                cbMonth.KeyPress += ComboBox_Key;
+                cbDay.KeyPress += ComboBox_Key;
+                cbHour.KeyPress += ComboBox_Key;
+                cbMinute.KeyPress += ComboBox_Key;
                 panel.Controls.AddRange(ctl);
             }
             return panel;
@@ -743,7 +846,7 @@ namespace CalendarUI.Forms
                 panel = new Panel()
                 {
                     Name = "insertPanel",
-                    Size = new Size(340, 312),
+                    Size = new Size(340, 367),
                     BackColor = Color.White,
                     Location = new Point(22, 176)
                 };
@@ -783,6 +886,20 @@ namespace CalendarUI.Forms
                     Font = new Font(new FontFamily(this.Font.Name), 11f),
                     Name = "insertContentTitle",
                     Location = new Point(190, 23)
+                };
+                Label hourTitle = new Label()
+                {
+                    Text = "Óra",
+                    Font = new Font(new FontFamily(this.Font.Name), 11f),
+                    Name = "insertHourTitle",
+                    Location = new Point(77,197)
+                };
+                Label minuteTitle = new Label()
+                {
+                    Text = "Perc",
+                    Font = new Font(new FontFamily(this.Font.Name), 11f),
+                    Name = "insertHourTitle",
+                    Location = new Point(208, 197)
                 };
 
                 #region ComboBox_Year
@@ -843,11 +960,49 @@ namespace CalendarUI.Forms
 
                 #endregion
 
+                #region ComboBox_Hour
+
+                ComboBox cbHour = new ComboBox()
+                {
+                    Name = "insertDateHour",
+                    Text = "12",
+                    Font = new Font(new FontFamily(this.Font.Name), 14f),
+                    Size = new Size(63, 32),
+                    Location = new Point(68, 228)
+                };
+                int[]hours = Enumerable.Range(1, 24).ToArray();
+                
+                for (int i = 0; i < hours.Length; i++)
+                {
+                    cbHour.Items.Add(hours[i]);
+                }
+
+                #endregion
+
+                #region ComboBox_Minute
+
+                ComboBox cbMinute = new ComboBox()
+                {
+                    Name = "insertDateMinute",
+                    Text = "30",
+                    Font = new Font(new FontFamily(this.Font.Name), 14f),
+                    Size = new Size(63, 32),
+                    Location = new Point(195,228)
+                };
+                int[] minutes = Enumerable.Range(0, 60).ToArray();
+
+                for (int i = 0; i < minutes.Length; i++)
+                {
+                    cbMinute.Items.Add(minutes[i]);
+                }
+
+                #endregion
+
                 TextBox content = new TextBox()
                 {
                     Name = "insertContent",
                     Size = new Size(309, 51),
-                    Location = new Point(15, 192),
+                    Location = new Point(14, 278),
                     Multiline = true,
                     Font = new Font(new FontFamily(this.Font.Name), 12f),
                     ScrollBars = ScrollBars.Vertical
@@ -857,7 +1012,7 @@ namespace CalendarUI.Forms
                 {
                     Name = "insertBtn",
                     Text = "Hozzáad",
-                    Location = new Point(122, 265),
+                    Location = new Point(118, 335),
                     Font = new Font(new FontFamily(this.Font.Name), 12f),
                     Size = new Size(93, 26)
                 };
@@ -867,13 +1022,26 @@ namespace CalendarUI.Forms
                 Control[] ctl =
                 {
                 wTitle,lvl1,lvl2,lvl3,cTitle,cbYear,cbMonth,cbDay,
-                content, confirmBtn
+                content, confirmBtn,
+                hourTitle,minuteTitle,cbMinute,cbHour
                 };
+
+                cbYear.KeyPress += ComboBox_Key;
+                cbMonth.KeyPress += ComboBox_Key;
+                cbDay.KeyPress += ComboBox_Key;
+                cbHour.KeyPress += ComboBox_Key;
+                cbMinute.KeyPress += ComboBox_Key;
 
                 panel.Controls.AddRange(ctl);
             }
             return panel;
         }
+
+        private void ComboBox_Key(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
         private Panel GenerateDeletePanel()
         {
             Panel panel = null;
@@ -955,7 +1123,7 @@ namespace CalendarUI.Forms
 
                 TaskModel.Edit(SelectedRow_Date, SelectedRow_Task);
 
-                RefreshForm();
+                RefreshForm_Old();
             }
             catch (Exception x)
             {
@@ -997,12 +1165,43 @@ namespace CalendarUI.Forms
             {
                 if (head.Controls[i].Name.Contains("insertDate"))
                 {
+                    Console.WriteLine(head.Controls[i].Text);
                     alarms.Add((ComboBox)head.Controls[i]);
                 }
             }
 
-            output = new DateTime(Convert.ToInt32(alarms[0].Text),
-                Convert.ToInt32(alarms[1].Text), Convert.ToInt32(alarms[2].Text));
+            int year = 0;
+            int month = 0;
+            int day = 0;
+            int hour = 0;
+            int minute = 0;
+
+            foreach (var item in alarms)
+            {
+                if (item.Name.Contains("Year"))
+                {
+                    year = Convert.ToInt32(item.Text);
+                }
+                if (item.Name.Contains("Month"))
+                {
+                    month = Convert.ToInt32(item.Text);
+                }
+                if (item.Name.Contains("Day"))
+                {
+                    day = Convert.ToInt32(item.Text);
+                }
+                if (item.Name.Contains("Hour"))
+                {
+                    hour = Convert.ToInt32(item.Text);
+                }
+                if (item.Name.Contains("Minute"))
+                {
+                    minute = Convert.ToInt32(item.Text);
+                }
+            }
+
+            output = new DateTime(year,
+                month, day, hour, minute,0);
 
             return output;
         }
@@ -1011,6 +1210,10 @@ namespace CalendarUI.Forms
             string output = "";
 
             output = head.Controls.OfType<TextBox>().ToList().Where(x => x.Name.Contains("insertContent")).FirstOrDefault().Text;
+            if (output.Length > 60)
+            {
+                output = "Túl hosszú az üzenet.";
+            }
 
             return output;
         }
@@ -1040,7 +1243,7 @@ namespace CalendarUI.Forms
 
             TaskModel.Insert(null, insertModel);
 
-            RefreshForm();
+            RefreshForm_Old();
         }
         private void deleteBtn_Yes_Click(object sender, EventArgs e)
         {
@@ -1049,7 +1252,7 @@ namespace CalendarUI.Forms
                 if (SelectedRow_Task != null)
                 {
                     TaskModel.Delete(SelectedRow_Task);
-                    RefreshForm();
+                    RefreshForm_Old();
                 } 
             }
             catch (Exception x)
@@ -1068,6 +1271,24 @@ namespace CalendarUI.Forms
         private void addCDButton_Click(object sender, EventArgs e)
         {
             statusPanel.Controls.Add(GenerateInsertPanel(true));
+        }
+
+        private void unsuccededLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EditForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            #region Application Icon
+
+            Form1.App_Icon.Icon = null;
+            Form1.App_Icon.Dispose();
+            Application.DoEvents();
+
+            #endregion
+
+            Application.Exit();
         }
     }
 }

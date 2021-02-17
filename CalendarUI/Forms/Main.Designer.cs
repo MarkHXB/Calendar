@@ -31,15 +31,18 @@ namespace Forms.Main
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuPanel_1 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel7 = new System.Windows.Forms.Panel();
             this.btnBackForm = new System.Windows.Forms.Button();
             this.menuPanel_2 = new System.Windows.Forms.Panel();
             this.currentTasksLbl = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.currentDayName = new System.Windows.Forms.Label();
-            this.mainPanel = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
@@ -51,33 +54,56 @@ namespace Forms.Main
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.mainPanel = new System.Windows.Forms.Panel();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.comboBox5 = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
             this.menuPanel_1.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.menuPanel_2.SuspendLayout();
-            this.mainPanel.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel5.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.mainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuPanel_1
             // 
             this.menuPanel_1.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.menuPanel_1.Controls.Add(this.panel4);
+            this.menuPanel_1.Controls.Add(this.panel6);
             this.menuPanel_1.Controls.Add(this.btnBackForm);
             this.menuPanel_1.Dock = System.Windows.Forms.DockStyle.Left;
             this.menuPanel_1.Location = new System.Drawing.Point(0, 0);
             this.menuPanel_1.Name = "menuPanel_1";
             this.menuPanel_1.Size = new System.Drawing.Size(214, 601);
             this.menuPanel_1.TabIndex = 14;
+            // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.Color.White;
+            this.panel6.Controls.Add(this.panel3);
+            this.panel6.Controls.Add(this.panel7);
+            this.panel6.Location = new System.Drawing.Point(12, 129);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(166, 145);
+            this.panel6.TabIndex = 7;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.panel3.Location = new System.Drawing.Point(0, 119);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(166, 26);
+            this.panel3.TabIndex = 0;
+            // 
+            // panel7
+            // 
+            this.panel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.panel7.Location = new System.Drawing.Point(0, 84);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(166, 58);
+            this.panel7.TabIndex = 0;
+            this.panel7.Paint += new System.Windows.Forms.PaintEventHandler(this.panel7_Paint);
             // 
             // btnBackForm
             // 
@@ -133,52 +159,52 @@ namespace Forms.Main
             this.currentDayName.TabIndex = 0;
             this.currentDayName.Text = "label1";
             // 
-            // mainPanel
+            // panel2
             // 
-            this.mainPanel.AutoScroll = true;
-            this.mainPanel.BackColor = System.Drawing.Color.White;
-            this.mainPanel.Controls.Add(this.panel3);
-            this.mainPanel.Controls.Add(this.panel1);
-            this.mainPanel.Controls.Add(this.panel2);
-            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainPanel.Location = new System.Drawing.Point(214, 91);
-            this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(979, 510);
-            this.mainPanel.TabIndex = 16;
-            this.mainPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseMove);
+            this.panel2.Controls.Add(this.button3);
+            this.panel2.Controls.Add(this.button2);
+            this.panel2.Controls.Add(this.label3);
+            this.panel2.Location = new System.Drawing.Point(613, 265);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(366, 156);
+            this.panel2.TabIndex = 1;
             // 
-            // panel3
+            // button3
             // 
-            this.panel3.Controls.Add(this.label5);
-            this.panel3.Controls.Add(this.button4);
-            this.panel3.Location = new System.Drawing.Point(583, 85);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(265, 104);
-            this.panel3.TabIndex = 6;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.button3.Location = new System.Drawing.Point(203, 93);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(100, 33);
+            this.button3.TabIndex = 2;
+            this.button3.Text = "Nem";
+            this.button3.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // button2
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label5.Location = new System.Drawing.Point(72, 12);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(105, 30);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "Új feladat";
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.button2.Location = new System.Drawing.Point(57, 93);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(100, 33);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "Igen";
+            this.button2.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // label3
             // 
-            this.button4.BackColor = System.Drawing.Color.Transparent;
-            this.button4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button4.BackgroundImage")));
-            this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button4.Location = new System.Drawing.Point(77, 54);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(98, 44);
-            this.button4.TabIndex = 0;
-            this.button4.UseVisualStyleBackColor = false;
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label3.Location = new System.Drawing.Point(43, 37);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(273, 25);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Biztosan törölni szeretnéd?";
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.comboBox5);
+            this.panel1.Controls.Add(this.comboBox4);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.radioButton3);
             this.panel1.Controls.Add(this.radioButton2);
@@ -191,7 +217,7 @@ namespace Forms.Main
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Location = new System.Drawing.Point(30, 24);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(340, 312);
+            this.panel1.Size = new System.Drawing.Size(340, 367);
             this.panel1.TabIndex = 5;
             // 
             // label1
@@ -240,7 +266,7 @@ namespace Forms.Main
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button1.Location = new System.Drawing.Point(122, 265);
+            this.button1.Location = new System.Drawing.Point(118, 335);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(93, 26);
             this.button1.TabIndex = 5;
@@ -250,7 +276,7 @@ namespace Forms.Main
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBox1.Location = new System.Drawing.Point(15, 192);
+            this.textBox1.Location = new System.Drawing.Point(14, 278);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -331,72 +357,76 @@ namespace Forms.Main
             this.comboBox1.TabIndex = 0;
             this.comboBox1.Text = "2021";
             // 
-            // panel2
+            // mainPanel
             // 
-            this.panel2.Controls.Add(this.button3);
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.label3);
-            this.panel2.Location = new System.Drawing.Point(30, 351);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(366, 156);
-            this.panel2.TabIndex = 1;
+            this.mainPanel.AutoScroll = true;
+            this.mainPanel.BackColor = System.Drawing.Color.White;
+            this.mainPanel.Controls.Add(this.panel1);
+            this.mainPanel.Controls.Add(this.panel2);
+            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanel.Location = new System.Drawing.Point(214, 91);
+            this.mainPanel.Name = "mainPanel";
+            this.mainPanel.Size = new System.Drawing.Size(979, 510);
+            this.mainPanel.TabIndex = 16;
+            this.mainPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseMove);
             // 
-            // button3
+            // comboBox4
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button3.Location = new System.Drawing.Point(203, 93);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 33);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Nem";
-            this.button3.UseVisualStyleBackColor = true;
+            this.comboBox4.AutoCompleteCustomSource.AddRange(new string[] {
+            "2021",
+            "2022"});
+            this.comboBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "2025"});
+            this.comboBox4.Location = new System.Drawing.Point(68, 228);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(63, 32);
+            this.comboBox4.TabIndex = 10;
+            this.comboBox4.Text = "12";
             // 
-            // button2
+            // comboBox5
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button2.Location = new System.Drawing.Point(57, 93);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 33);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Igen";
-            this.button2.UseVisualStyleBackColor = true;
+            this.comboBox5.AutoCompleteCustomSource.AddRange(new string[] {
+            "2021",
+            "2022"});
+            this.comboBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.comboBox5.FormattingEnabled = true;
+            this.comboBox5.Items.AddRange(new object[] {
+            "2021",
+            "2022",
+            "2023",
+            "2024",
+            "2025"});
+            this.comboBox5.Location = new System.Drawing.Point(195, 228);
+            this.comboBox5.Name = "comboBox5";
+            this.comboBox5.Size = new System.Drawing.Size(63, 32);
+            this.comboBox5.TabIndex = 11;
+            this.comboBox5.Text = "40";
             // 
-            // label3
+            // label5
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(43, 37);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(273, 25);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Biztosan törölni szeretnéd?";
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.panel5);
-            this.panel4.Location = new System.Drawing.Point(38, 307);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(265, 104);
-            this.panel4.TabIndex = 7;
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label5.Location = new System.Drawing.Point(77, 197);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(33, 20);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Óra";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.Location = new System.Drawing.Point(27, 7);
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label6.Location = new System.Drawing.Point(208, 197);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(212, 24);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Új feladat hozzáadása";
-            // 
-            // panel5
-            // 
-            this.panel5.Controls.Add(this.label6);
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 0);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(265, 36);
-            this.panel5.TabIndex = 1;
+            this.label6.Size = new System.Drawing.Size(36, 20);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Perc";
             // 
             // MainForm
             // 
@@ -416,18 +446,14 @@ namespace Forms.Main
             this.MouseLeave += new System.EventHandler(this.MainForm_MouseLeave);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainP_Move);
             this.menuPanel_1.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
             this.menuPanel_2.ResumeLayout(false);
             this.menuPanel_2.PerformLayout();
-            this.mainPanel.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.mainPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -439,7 +465,8 @@ namespace Forms.Main
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label currentDayName;
         private System.Windows.Forms.Button btnBackForm;
-        private System.Windows.Forms.Panel mainPanel;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
@@ -455,11 +482,11 @@ namespace Forms.Main
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Panel mainPanel;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox comboBox5;
+        private System.Windows.Forms.ComboBox comboBox4;
     }
 }
